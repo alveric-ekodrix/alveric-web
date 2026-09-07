@@ -1,0 +1,73 @@
+import React from 'react';
+import { HardHat, Award, Clock, Layers } from 'lucide-react';
+
+const CORE_PILLARS = [
+  {
+    icon: HardHat,
+    title: 'Uncompromising Safety',
+    description:
+      'Zero-harm philosophy enforced across every job site with strict adherence to regional environmental and occupational safety protocols.',
+    color: 'text-gold-500 bg-gold-50 border-gold-200',
+  },
+  {
+    icon: Award,
+    title: 'Certified Engineering Quality',
+    description:
+      'ISO-aligned methodologies, high-grade certified materials, and meticulous workmanship verified through structured QA checklists.',
+    color: 'text-navy-900 bg-navy-50 border-navy-200',
+  },
+  {
+    icon: Clock,
+    title: 'Milestone-Driven Delivery',
+    description:
+      'Disciplined critical-path scheduling, rapid mobilization of technical teams, and on-time completion with transparent status reporting.',
+    color: 'text-gold-500 bg-gold-50 border-gold-200',
+  },
+  {
+    icon: Layers,
+    title: 'Turnkey Multi-Disciplinary Scope',
+    description:
+      'Comprehensive capabilities spanning electrical systems, HVAC ventilation, plumbing, fit-out, and preventative facility maintenance.',
+    color: 'text-navy-900 bg-navy-50 border-navy-200',
+  },
+];
+
+export function AboutPillarsSection() {
+  return (
+    <section className="py-20 bg-slate-50/80 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-14">
+          <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-500">
+            STANDARDS &amp; DISCIPLINE
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight mt-2">
+            The Four Pillars Behind Every Project We Deliver
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-2">
+            Our systematic approach ensures that every contract is executed safely, reliably, and on schedule.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {CORE_PILLARS.map((pillar, idx) => {
+            const Icon = pillar.icon;
+            return (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 border ${pillar.color}`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-base font-bold text-navy-900 mb-2">{pillar.title}</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed">{pillar.description}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
