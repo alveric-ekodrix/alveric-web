@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
-import { Plus, Edit, Trash2, Eye, Wrench } from 'lucide-react';
+import { ApplyStandardContentButton } from '@/components/admin/ApplyStandardContentButton';
+import { Plus, Edit, Trash2, Wrench } from 'lucide-react';
 
 export const revalidate = 0;
 
@@ -25,13 +26,16 @@ export default async function AdminServicesPage() {
           </p>
         </div>
 
-        <Link
-          href="/admin/services/new"
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-navy-900 text-white text-xs font-bold hover:bg-navy-800 transition shadow"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Service</span>
-        </Link>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <ApplyStandardContentButton />
+          <Link
+            href="/admin/services/new"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-navy-900 text-white text-xs font-bold hover:bg-navy-800 transition shadow"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add New Service</span>
+          </Link>
+        </div>
       </div>
 
       {serviceList.length === 0 ? (
@@ -104,14 +108,6 @@ export default async function AdminServicesPage() {
                       )}
                     </td>
                     <td className="py-3 px-4 text-right space-x-2">
-                      <Link
-                        href={`/services/${service.slug}`}
-                        target="_blank"
-                        className="inline-block p-1 text-slate-400 hover:text-navy-900 transition"
-                        title="View Live Page"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Link>
                       <Link
                         href={`/admin/services/${service.id}/edit`}
                         className="inline-block p-1 text-slate-400 hover:text-navy-900 transition"

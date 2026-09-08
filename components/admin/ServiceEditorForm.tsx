@@ -9,6 +9,10 @@ import { slugify } from '@/lib/utils';
 import { ImageUploadZone } from '@/components/media/ImageUploadZone';
 import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import {
+  STANDARD_SERVICE_BENEFITS,
+  STANDARD_SERVICE_PROCESS_STEPS,
+} from './ApplyStandardContentButton';
+import {
   Save,
   Plus,
   Trash2,
@@ -85,6 +89,14 @@ export function ServiceEditorForm({ initialData, isEditing = false }: ServiceEdi
 
   function handleRemoveStep(index: number) {
     setProcessSteps(processSteps.filter((_, i) => i !== index));
+  }
+
+  function handleLoadStandardBenefits() {
+    setBenefits([...STANDARD_SERVICE_BENEFITS]);
+  }
+
+  function handleLoadStandardProcessSteps() {
+    setProcessSteps([...STANDARD_SERVICE_PROCESS_STEPS]);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -303,9 +315,23 @@ export function ServiceEditorForm({ initialData, isEditing = false }: ServiceEdi
 
       {/* Dynamic Key Benefits */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h2 className="text-sm font-black text-navy-900 uppercase tracking-wider border-b border-slate-100 pb-3">
-          Key Advantages & Benefits
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h2 className="text-sm font-black text-navy-900 uppercase tracking-wider">
+              Key Advantages &amp; Benefits
+            </h2>
+            <p className="text-[11px] text-slate-400">
+              Displayed as bullet benefits on the service detail page.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleLoadStandardBenefits}
+            className="self-start sm:self-auto text-[11px] font-bold text-gold-700 bg-gold-50 hover:bg-gold-100 px-3 py-1.5 rounded-lg border border-gold-300/80 transition shadow-2xs"
+          >
+            + Insert Standard Technical Benefits
+          </button>
+        </div>
 
         <div className="flex gap-2">
           <input
@@ -351,9 +377,23 @@ export function ServiceEditorForm({ initialData, isEditing = false }: ServiceEdi
 
       {/* Dynamic Process Steps */}
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h2 className="text-sm font-black text-navy-900 uppercase tracking-wider border-b border-slate-100 pb-3">
-          Execution Process Steps
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <h2 className="text-sm font-black text-navy-900 uppercase tracking-wider">
+              Execution Process Steps
+            </h2>
+            <p className="text-[11px] text-slate-400">
+              Milestone-driven technical steps displayed as a timeline.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleLoadStandardProcessSteps}
+            className="self-start sm:self-auto text-[11px] font-bold text-gold-700 bg-gold-50 hover:bg-gold-100 px-3 py-1.5 rounded-lg border border-gold-300/80 transition shadow-2xs"
+          >
+            + Insert Standard 4-Step Process
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
           <input

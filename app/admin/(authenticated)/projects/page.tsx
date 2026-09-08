@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils';
-import { Plus, Edit, Eye, FolderKanban, MapPin } from 'lucide-react';
+import { Plus, Edit, FolderKanban, MapPin } from 'lucide-react';
 
 export const revalidate = 0;
 
@@ -101,14 +101,6 @@ export default async function AdminProjectsPage() {
                       )}
                     </td>
                     <td className="py-3 px-4 text-right space-x-2">
-                      <Link
-                        href={`/projects/${project.slug}`}
-                        target="_blank"
-                        className="inline-block p-1 text-slate-400 hover:text-navy-900 transition"
-                        title="View Public Page"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Link>
                       <Link
                         href={`/admin/projects/${project.id}/edit`}
                         className="inline-block p-1 text-slate-400 hover:text-navy-900 transition"
