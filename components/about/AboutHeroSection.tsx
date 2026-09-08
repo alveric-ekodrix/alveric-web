@@ -15,9 +15,7 @@ export function AboutHeroSection({
   bannerImageUrl,
   calculatedYears,
 }: AboutHeroSectionProps) {
-  const imageUrl =
-    bannerImageUrl ||
-    'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?q=80&w=1200&auto=format&fit=crop';
+  const imageUrl = bannerImageUrl || null;
 
   return (
     <section className="relative bg-navy-950 text-white py-20 lg:py-28 overflow-hidden border-b border-navy-800">
@@ -38,9 +36,11 @@ export function AboutHeroSection({
               {heading}
             </h1>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
-              {description}
-            </p>
+            {description && (
+              <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+                {description}
+              </p>
+            )}
 
             {/* Quick Trust Highlights */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
@@ -64,14 +64,28 @@ export function AboutHeroSection({
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Main Hero Photo */}
               <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border-2 border-navy-800/80 bg-navy-900 group">
-                <Image
-                  src={imageUrl}
-                  alt="Alveric Technical Contracting Engineering Site"
-                  fill
-                  priority
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent" />
+                {imageUrl ? (
+                  <Image
+                    src={imageUrl}
+                    alt="Alveric Technical Contracting Engineering Site"
+                    fill
+                    priority
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-center">
+                    <div className="w-16 h-16 rounded-2xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-3 shadow-inner">
+                      <ShieldCheck className="w-8 h-8 text-gold-400" />
+                    </div>
+                    <span className="text-sm font-bold text-white mb-1">
+                      ALVERIC Technical Contracting
+                    </span>
+                    <span className="text-[11px] text-slate-400 max-w-xs">
+                      Building Solutions. Delivering Excellence.
+                    </span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/20 to-transparent pointer-events-none" />
 
                 <div className="absolute bottom-4 left-4 right-4 z-10 text-white">
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-gold-400 block">

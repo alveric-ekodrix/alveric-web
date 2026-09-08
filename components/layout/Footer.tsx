@@ -285,21 +285,19 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} ALVERIC Technical Contracting LLC. All Rights Reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link href="/contact" className="hover:text-slate-400 transition">
-              Privacy Policy
-            </Link>
-            <span className="text-slate-700">|</span>
-            <Link href="/contact" className="hover:text-slate-400 transition">
-              Terms & Conditions
-            </Link>
-            <span className="text-slate-700">|</span>
-            <Link href="/admin/login" className="text-slate-600 hover:text-gold-500 transition">
-              Admin Portal
-            </Link>
-          </div>
+        <div className="pt-8 flex flex-col items-center justify-center text-center gap-1.5 text-xs text-slate-500">
+          <p>© 2026 ALVERIC Technical Contracting LLC. All Rights Reserved.</p>
+          <p className="text-[11px] text-slate-500">
+            Crafted by{' '}
+            <a
+              href="https://ekodrix.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-gold-400 font-medium transition"
+            >
+              ekodrix
+            </a>
+          </p>
         </div>
       </div>
     </footer>

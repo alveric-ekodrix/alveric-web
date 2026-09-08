@@ -42,8 +42,6 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
     { label: 'About Us', href: '/about' },
     { label: 'Services', href: '/services', hasDropdown: true },
     { label: 'Projects', href: '/projects' },
-    { label: 'Why Us', href: '/why-us' },
-    { label: 'Careers', href: '/careers' },
     { label: 'Contact Us', href: '/contact' },
   ];
 

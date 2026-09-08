@@ -11,7 +11,7 @@ import {
   MessageSquareQuote,
   Plus,
   ArrowRight,
-  Eye,
+  Phone,
 } from 'lucide-react';
 
 export const revalidate = 0; // Dynamic data for admin dashboard
@@ -124,6 +124,13 @@ export default async function AdminDashboardPage() {
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Post Job</span>
+          </Link>
+          <Link
+            href="/admin/contact"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-navy-900 text-xs font-bold hover:bg-slate-50 transition shadow-sm"
+          >
+            <Phone className="w-3.5 h-3.5 text-gold-500" />
+            <span>Contact &amp; Social</span>
           </Link>
         </div>
       </div>
