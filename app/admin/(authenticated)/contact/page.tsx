@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { CompanySettings } from '@/types/database';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
 import {
   Phone,
   Mail,
@@ -10,7 +11,6 @@ import {
   Clock,
   Globe,
   Save,
-  CheckCircle2,
   AlertCircle,
   Loader2,
   ExternalLink,
@@ -38,6 +38,7 @@ export default function ContactSettingsAdminPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const supabase = createClient();
+  const { showToast } = useAdminToast();
 
   useEffect(() => {
     loadSettings();
@@ -112,8 +113,11 @@ export default function ContactSettingsAdminPage() {
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
+      showToast('Contact details, address, and social links saved successfully!');
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Failed to save contact and social settings');
+      const msg = err?.message || 'Failed to save contact and social settings';
+      setErrorMessage(msg);
+      showToast(msg, 'error');
     } finally {
       setIsSaving(false);
     }
@@ -151,12 +155,7 @@ export default function ContactSettingsAdminPage() {
         </button>
       </div>
 
-      {saveSuccess && (
-        <div className="flex items-center gap-2 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-semibold">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Contact details, address, and social links updated successfully! Changes are live across the site.</span>
-        </div>
-      )}
+
 
       {errorMessage && (
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-semibold">

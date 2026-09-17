@@ -32,19 +32,29 @@ const CORE_PILLARS = [
   },
 ];
 
-export function AboutPillarsSection() {
+interface AboutPillarsSectionProps {
+  eyebrow?: string | null;
+  heading?: string | null;
+  description?: string | null;
+}
+
+export function AboutPillarsSection({
+  eyebrow,
+  heading,
+  description,
+}: AboutPillarsSectionProps = {}) {
   return (
     <section className="py-20 bg-slate-50/80 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-500">
-            STANDARDS &amp; DISCIPLINE
+            {eyebrow || 'STANDARDS & DISCIPLINE'}
           </span>
           <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight mt-2">
-            The Four Pillars Behind Every Project We Deliver
+            {heading || 'The Four Pillars Behind Every Project We Deliver'}
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-2">
-            Our systematic approach ensures that every contract is executed safely, reliably, and on schedule.
+            {description || 'Our systematic approach ensures that every contract is executed safely, reliably, and on schedule.'}
           </p>
         </div>
 

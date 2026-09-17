@@ -22,6 +22,50 @@ interface ImageUploadZoneProps {
   folder?: string;
   previewHeight?: string;
   allowLibraryPicker?: boolean;
+  /** Set to false to skip compression (e.g. hero/banner images). Default: true */
+  compress?: boolean;
+}
+
+// ── Client-side image compression via Canvas ──────────────────────────────────
+async function compressImage(file: File, maxDim = 2400, quality = 0.82): Promise<File> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width <= maxDim && height <= maxDim) {
+        // Already small enough — skip canvas round-trip
+        resolve(file);
+        return;
+      }
+      const ratio = Math.min(maxDim / width, maxDim / height);
+      width = Math.round(width * ratio);
+      height = Math.round(height * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, width, height);
+      // Prefer webp when the browser supports it, otherwise keep original mime
+      const outputMime = canvas.toDataURL('image/webp').startsWith('data:image/webp')
+        ? 'image/webp'
+        : file.type;
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) { resolve(file); return; }
+          // Keep original extension name
+          const ext = outputMime === 'image/webp' ? '.webp' : file.name.slice(file.name.lastIndexOf('.'));
+          const baseName = file.name.replace(/\.[^/.]+$/, '');
+          resolve(new File([blob], `${baseName}${ext}`, { type: outputMime }));
+        },
+        outputMime,
+        quality
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
 }
 
 export function ImageUploadZone({
@@ -32,6 +76,7 @@ export function ImageUploadZone({
   folder = 'alveric',
   previewHeight = 'h-48',
   allowLibraryPicker = true,
+  compress = true,
 }: ImageUploadZoneProps) {
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -88,29 +133,35 @@ export function ImageUploadZone({
     }
   };
 
-  const uploadFile = async (file: File) => {
+  const uploadFile = async (rawFile: File) => {
     setUploadError(null);
 
-    if (!file.type.startsWith('image/')) {
+    if (!rawFile.type.startsWith('image/')) {
       setUploadError('Please select a valid image file (JPG, PNG, WEBP, SVG).');
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
+    if (rawFile.size > 10 * 1024 * 1024) {
       setUploadError('File size exceeds the 10MB limit.');
       return;
     }
 
     // Immediate instant local preview so the box NEVER stays blank
-    const objectUrl = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(rawFile);
     setLocalPreview(objectUrl);
     setIsUploading(true);
 
     try {
+      // Compress before upload (skip SVGs — canvas can't reliably handle them)
+      const fileToUpload =
+        compress && rawFile.type !== 'image/svg+xml'
+          ? await compressImage(rawFile)
+          : rawFile;
+
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('file', fileToUpload);
       formData.append('folder', folder);
-      formData.append('alt_text', file.name.replace(/\.[^/.]+$/, ''));
+      formData.append('alt_text', rawFile.name.replace(/\.[^/.]+$/, ''));
 
       const res = await fetch('/api/media/upload', {
         method: 'POST',

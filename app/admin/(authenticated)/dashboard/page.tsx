@@ -25,7 +25,8 @@ export default async function AdminDashboardPage() {
     { count: publishedProjects },
     { count: totalServices },
     { count: publishedServices },
-    { count: newInquiries },
+    { count: newQuoteInquiries },
+    { count: newContactSubmissions },
     { count: activeJobs },
     { count: totalApplications },
     { count: totalTestimonials },
@@ -35,10 +36,13 @@ export default async function AdminDashboardPage() {
     supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('services').select('*', { count: 'exact', head: true }).eq('is_published', true),
     supabase.from('project_inquiries').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('contact_submissions').select('*', { count: 'exact', head: true }).eq('status', 'new'),
     supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('is_published', true),
     supabase.from('job_applications').select('*', { count: 'exact', head: true }),
     supabase.from('testimonials').select('*', { count: 'exact', head: true }),
   ]);
+
+  const totalNewInquiries = (newQuoteInquiries || 0) + (newContactSubmissions || 0);
 
   // 2. Fetch recent inquiries
   const { data: recentInquiries } = await supabase
@@ -73,8 +77,8 @@ export default async function AdminDashboardPage() {
     },
     {
       title: 'New Inquiries',
-      value: newInquiries || 0,
-      subValue: 'pending review',
+      value: totalNewInquiries || 0,
+      subValue: `${newQuoteInquiries || 0} quotes • ${newContactSubmissions || 0} messages`,
       icon: Inbox,
       href: '/admin/inquiries',
       color: 'border-emerald-500',

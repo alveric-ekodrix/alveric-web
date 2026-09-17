@@ -4,10 +4,30 @@ import { Target, Compass } from 'lucide-react';
 interface AboutMVVSectionProps {
   mission: string;
   vision: string;
-  valueItems: string[];
+  valueItems: (string | { title: string; description?: string })[];
+  missionEyebrow?: string | null;
+  missionSupportingText?: string | null;
+  visionEyebrow?: string | null;
+  visionSupportingText?: string | null;
+  valuesEyebrow?: string | null;
+  valuesHeading?: string | null;
+  valuesSubtext?: string | null;
+  valuesLinkText?: string | null;
 }
 
-export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSectionProps) {
+export function AboutMVVSection({
+  mission,
+  vision,
+  valueItems,
+  missionEyebrow,
+  missionSupportingText,
+  visionEyebrow,
+  visionSupportingText,
+  valuesEyebrow,
+  valuesHeading,
+  valuesSubtext,
+  valuesLinkText,
+}: AboutMVVSectionProps) {
   return (
     <>
       {/* Mission & Vision */}
@@ -23,7 +43,7 @@ export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSection
                   <Target className="w-6 h-6" />
                 </div>
                 <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-gold-400 block mb-2">
-                  OUR PURPOSE
+                  {missionEyebrow || 'OUR PURPOSE'}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-4">
                   Our Mission
@@ -32,7 +52,7 @@ export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSection
               </div>
 
               <div className="mt-8 pt-6 border-t border-navy-800 flex items-center justify-between text-xs text-slate-400 font-semibold">
-                <span>Focused on Long-Term Client Value</span>
+                <span>{missionSupportingText || 'Focused on Long-Term Client Value'}</span>
                 <Target className="w-4 h-4 text-gold-400" />
               </div>
             </div>
@@ -44,7 +64,7 @@ export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSection
                   <Compass className="w-6 h-6" />
                 </div>
                 <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-gold-600 block mb-2">
-                  OUR HORIZON
+                  {visionEyebrow || 'OUR HORIZON'}
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight mb-4">
                   Our Vision
@@ -53,7 +73,7 @@ export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSection
               </div>
 
               <div className="mt-8 pt-6 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500 font-semibold">
-                <span>Setting Regional Contracting Benchmarks</span>
+                <span>{visionSupportingText || 'Setting Regional Contracting Benchmarks'}</span>
                 <Compass className="w-4 h-4 text-navy-900" />
               </div>
             </div>
@@ -66,34 +86,47 @@ export function AboutMVVSection({ mission, vision, valueItems }: AboutMVVSection
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-500">
-              FOUNDATIONAL ETHICS
+              {valuesEyebrow || 'FOUNDATIONAL ETHICS'}
             </span>
             <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight mt-2">
-              Our Guiding Values
+              {valuesHeading || 'Our Guiding Values'}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 mt-2">
-              The non-negotiable principles that guide our interactions, job-site decisions, and craftsmanship.
+              {valuesSubtext || 'The non-negotiable principles that guide our interactions, job-site decisions, and craftsmanship.'}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {valueItems.map((val, idx) => (
-              <div
-                key={idx}
-                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-start gap-4 hover:border-navy-900/40 transition"
-              >
-                <div className="w-8 h-8 rounded-lg bg-navy-900 text-gold-400 font-black text-xs flex items-center justify-center shrink-0">
-                  {idx + 1}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {valueItems.map((val, idx) => {
+              const title = typeof val === 'string' ? val : val.title;
+              const desc = typeof val === 'string' ? 'Applied rigorously across planning, site operations, and client management.' : val.description || 'Applied rigorously across planning, site operations, and client management.';
+              return (
+                <div
+                  key={idx}
+                  className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs flex items-start gap-4 hover:border-navy-900/40 transition"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-navy-900 text-gold-400 font-black text-xs flex items-center justify-center shrink-0">
+                    {idx + 1}
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-navy-900 leading-snug">{title}</h3>
+                    <p className="text-xs text-slate-500 mt-1">{desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-bold text-navy-900 leading-snug">{val}</h3>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Applied rigorously across planning, site operations, and client management.
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
+
+          {valuesLinkText && (
+            <div className="text-center mt-10">
+              <a
+                href="/why-us"
+                className="inline-flex items-center gap-2 text-xs font-extrabold text-navy-900 hover:text-gold-600 transition"
+              >
+                <span>{valuesLinkText}</span>
+              </a>
+            </div>
+          )}
         </div>
       </section>
     </>

@@ -66,7 +66,7 @@ export function AdminSidebar() {
     {
       title: 'Inquiries',
       items: [
-        { label: 'Quote Inquiries', href: '/admin/inquiries', icon: Inbox },
+        { label: 'Inquiries & Leads', href: '/admin/inquiries', icon: Inbox },
       ],
     },
   ];

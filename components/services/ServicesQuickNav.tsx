@@ -91,13 +91,13 @@ export function ServicesQuickNav({ services }: ServicesQuickNavProps) {
               href={`/services/${service.slug}`}
               className="snap-start shrink-0 flex flex-col items-center justify-start text-center px-3 sm:px-4 py-2 w-[125px] sm:w-[135px] lg:flex-1 lg:min-w-0 hover:bg-slate-50/80 transition-colors group"
             >
-              {/* Icon Container with subtle hover animation */}
-              <div className="mb-2 p-1.5 sm:p-2 rounded-lg bg-slate-50 group-hover:bg-white group-hover:shadow-sm transition-all duration-200 group-hover:scale-105 shrink-0 flex items-center justify-center">
+              {/* Icon Container - no background, balanced icon size */}
+              <div className="mb-2 shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
                 <ServiceIcon
                   iconUrl={service.icon_media?.secure_url}
                   slug={service.slug}
                   name={service.name}
-                  className="w-7 h-7 sm:w-8 sm:h-8"
+                  className="w-12 h-12 sm:w-13 sm:h-13 drop-shadow-sm"
                 />
               </div>
 
