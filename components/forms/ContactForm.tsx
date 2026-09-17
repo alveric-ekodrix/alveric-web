@@ -38,16 +38,32 @@ export function ContactForm() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from('contact_submissions').insert([
-        {
-          full_name: payload.full_name,
-          email: payload.email,
-          phone: payload.phone || null,
-          subject: payload.subject || null,
-          message: payload.message,
-          status: 'new',
-        },
-      ]);
+      // The PostgreSQL schema table 'contact_submissions' defines the column as 'name'
+      const submissionData = {
+        name: payload.full_name,
+        email: payload.email,
+        phone: payload.phone || null,
+        subject: payload.subject || null,
+        message: payload.message,
+        status: 'new',
+      };
+
+      let { error } = await supabase.from('contact_submissions').insert([submissionData]);
+
+      // Fallback in case a custom environment migrated column to full_name
+      if (error && (error.message?.includes("'name'") || error.message?.includes('schema cache'))) {
+        const retryResult = await supabase.from('contact_submissions').insert([
+          {
+            full_name: payload.full_name,
+            email: payload.email,
+            phone: payload.phone || null,
+            subject: payload.subject || null,
+            message: payload.message,
+            status: 'new',
+          },
+        ]);
+        error = retryResult.error;
+      }
 
       if (error) {
         throw new Error(error.message || 'Failed to submit contact form');

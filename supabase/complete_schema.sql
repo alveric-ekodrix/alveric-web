@@ -94,6 +94,71 @@ CREATE TABLE IF NOT EXISTS about_settings (
   mission TEXT,
   vision TEXT,
   values TEXT,
+
+  -- Hero fields
+  hero_eyebrow TEXT DEFAULT 'ABOUT ALVERIC',
+  hero_feature_1_title TEXT DEFAULT 'Quality Workmanship',
+  hero_feature_2_title TEXT DEFAULT 'On-Time Delivery',
+  hero_feature_3_title TEXT DEFAULT 'Client-Centric Approach',
+  hero_primary_button TEXT DEFAULT 'Our Services',
+  hero_secondary_button TEXT DEFAULT 'Get a Quote',
+  hero_trust_text TEXT DEFAULT 'Trusted by 100+ clients across the UAE',
+  hero_overlay_label TEXT DEFAULT 'ENGINEERING EXCELLENCE',
+  hero_overlay_title TEXT DEFAULT 'Engineering Excellence for a Brighter Future',
+
+  -- Story fields
+  story_eyebrow TEXT DEFAULT 'OUR STORY',
+  story_heading TEXT DEFAULT 'A Journey Built on Trust and Expertise',
+  story_button TEXT DEFAULT 'Our Journey',
+  story_image_overlay_title TEXT DEFAULT 'Creating Smarter Spaces for Better Lives',
+
+  -- Mission fields
+  mission_eyebrow TEXT DEFAULT 'OUR PURPOSE',
+  mission_supporting_text TEXT DEFAULT 'Focused on Progress. Driven by People.',
+
+  -- Vision fields
+  vision_eyebrow TEXT DEFAULT 'OUR HORIZON',
+  vision_supporting_text TEXT DEFAULT 'Setting New Standards in Contracting Excellence.',
+
+  -- Values fields
+  values_items JSONB DEFAULT '[
+    {"title": "Integrity", "description": "We do what''s right, always."},
+    {"title": "Quality", "description": "We never compromise on standards."},
+    {"title": "Safety", "description": "People and safety come first."},
+    {"title": "Innovation", "description": "We embrace smarter solutions."}
+  ]'::jsonb,
+  values_link_text TEXT DEFAULT 'Learn More About Our Values',
+
+  -- Why Choose fields
+  why_choose_eyebrow TEXT DEFAULT 'WHY CHOOSE ALVERIC',
+  why_choose_heading TEXT DEFAULT 'More Than a Contractor A Long-Term Partner',
+  why_choose_description TEXT DEFAULT 'We bring together technical expertise, industry experience, and a commitment to excellence to deliver solutions that stand the test of time.',
+  why_choose_benefits JSONB DEFAULT '[
+    "Licensed & Certified Professionals",
+    "Comprehensive Project Management",
+    "Transparent Communication",
+    "Commitment to Quality & Safety"
+  ]'::jsonb,
+  why_choose_button TEXT DEFAULT 'Work With Us',
+  why_choose_image_overlay TEXT DEFAULT 'Trusted Partner in Every Build',
+
+  -- Certifications fields
+  certifications_eyebrow TEXT DEFAULT 'OUR CERTIFICATIONS',
+  certifications_heading TEXT DEFAULT 'Committed to Global Standards',
+  certifications_description TEXT DEFAULT 'We follow internationally recognized standards to ensure quality, safety, and compliance in every project we deliver.',
+  certifications_items JSONB DEFAULT '[
+    {"title": "ISO 9001:2015"},
+    {"title": "UAE Municipality Compliant"},
+    {"title": "HSE Certified"}
+  ]'::jsonb,
+
+  -- Final CTA fields
+  cta_eyebrow TEXT DEFAULT 'LET''S BUILD TOGETHER',
+  cta_heading TEXT DEFAULT 'Ready to Bring Your Project to Life?',
+  cta_description TEXT DEFAULT 'Partner with Alveric Technical Contracting and experience reliable, efficient, and high-quality contracting solutions.',
+  cta_primary_button TEXT DEFAULT 'Get a Free Quote',
+  cta_secondary_button TEXT DEFAULT 'Chat on WhatsApp',
+
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
 );
