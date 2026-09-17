@@ -40,6 +40,7 @@ export interface CompanySettings {
   instagram_url: string | null;
   linkedin_url: string | null;
   youtube_url: string | null;
+  founding_year?: string | number | null;
   created_at: string;
   updated_at: string;
   logo_media?: Media | null;
@@ -77,6 +78,15 @@ export interface HomepageSettings {
   about_image_3?: Media | null;
 }
 
+export interface AboutValueItem {
+  title: string;
+  description: string;
+}
+
+export interface AboutCertificationItem {
+  title: string;
+}
+
 export interface AboutSettings {
   id: string;
   heading: string | null;
@@ -86,9 +96,63 @@ export interface AboutSettings {
   vision: string | null;
   values: string | null;
   banner_image_id?: string | null;
+
+  // Hero fields
+  hero_eyebrow?: string | null;
+  hero_feature_1_title?: string | null;
+  hero_feature_2_title?: string | null;
+  hero_feature_3_title?: string | null;
+  hero_primary_button?: string | null;
+  hero_secondary_button?: string | null;
+  hero_trust_text?: string | null;
+  hero_overlay_label?: string | null;
+  hero_overlay_title?: string | null;
+
+  // Story fields
+  story_eyebrow?: string | null;
+  story_heading?: string | null;
+  story_button?: string | null;
+  story_image_overlay_title?: string | null;
+
+  // Mission fields
+  mission_eyebrow?: string | null;
+  mission_supporting_text?: string | null;
+
+  // Vision fields
+  vision_eyebrow?: string | null;
+  vision_supporting_text?: string | null;
+
+  // Values fields
+  values_items?: AboutValueItem[] | Json | null;
+  values_link_text?: string | null;
+
+  // Why Choose fields
+  why_choose_eyebrow?: string | null;
+  why_choose_heading?: string | null;
+  why_choose_description?: string | null;
+  why_choose_benefits?: string[] | Json | null;
+  why_choose_button?: string | null;
+  why_choose_image_overlay?: string | null;
+
+  // Certifications fields
+  certifications_eyebrow?: string | null;
+  certifications_heading?: string | null;
+  certifications_description?: string | null;
+  certifications_items?: AboutCertificationItem[] | Json | null;
+
+  // Final CTA fields
+  cta_eyebrow?: string | null;
+  cta_heading?: string | null;
+  cta_description?: string | null;
+  cta_primary_button?: string | null;
+  cta_secondary_button?: string | null;
+
   created_at: string;
   updated_at: string;
   banner_image?: Media | null;
+  story_image?: Media | null;
+  team_image?: Media | null;
+  cta_image?: Media | null;
 }
 
 export interface WhyUsSettings {
@@ -259,7 +323,8 @@ export interface ProjectInquiry {
 
 export interface ContactSubmission {
   id: string;
-  full_name: string;
+  name?: string;
+  full_name?: string;
   email: string;
   phone: string | null;
   subject: string | null;

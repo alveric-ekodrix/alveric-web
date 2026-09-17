@@ -9,6 +9,7 @@ import { HeroSection } from '@/components/hero/HeroSection';
 import { ServicesQuickNav } from '@/components/services/ServicesQuickNav';
 import { HomeAboutSection } from '@/components/about/HomeAboutSection';
 import { HomeServicesSection } from '@/components/services/HomeServicesSection';
+import { TrustBadgesSection } from '@/components/home/TrustBadgesSection';
 import { HomeProjectsSection } from '@/components/projects/HomeProjectsSection';
 import { HomeCtaSection } from '@/components/cta/HomeCtaSection';
 
@@ -40,6 +41,9 @@ export default async function HomePage() {
 
       {/* 4. SERVICES */}
       <HomeServicesSection services={services} />
+
+      {/* 4.5. TRUST BADGES */}
+      <TrustBadgesSection />
 
       {/* 5. PROJECTS */}
       <HomeProjectsSection projects={projects} />

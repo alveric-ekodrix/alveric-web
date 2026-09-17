@@ -11,7 +11,7 @@ import {
   MessageSquareQuote,
   Plus,
   ArrowRight,
-  Eye,
+  Phone,
 } from 'lucide-react';
 
 export const revalidate = 0; // Dynamic data for admin dashboard
@@ -25,7 +25,8 @@ export default async function AdminDashboardPage() {
     { count: publishedProjects },
     { count: totalServices },
     { count: publishedServices },
-    { count: newInquiries },
+    { count: newQuoteInquiries },
+    { count: newContactSubmissions },
     { count: activeJobs },
     { count: totalApplications },
     { count: totalTestimonials },
@@ -35,10 +36,13 @@ export default async function AdminDashboardPage() {
     supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('services').select('*', { count: 'exact', head: true }).eq('is_published', true),
     supabase.from('project_inquiries').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase.from('contact_submissions').select('*', { count: 'exact', head: true }).eq('status', 'new'),
     supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('is_published', true),
     supabase.from('job_applications').select('*', { count: 'exact', head: true }),
     supabase.from('testimonials').select('*', { count: 'exact', head: true }),
   ]);
+
+  const totalNewInquiries = (newQuoteInquiries || 0) + (newContactSubmissions || 0);
 
   // 2. Fetch recent inquiries
   const { data: recentInquiries } = await supabase
@@ -73,8 +77,8 @@ export default async function AdminDashboardPage() {
     },
     {
       title: 'New Inquiries',
-      value: newInquiries || 0,
-      subValue: 'pending review',
+      value: totalNewInquiries || 0,
+      subValue: `${newQuoteInquiries || 0} quotes • ${newContactSubmissions || 0} messages`,
       icon: Inbox,
       href: '/admin/inquiries',
       color: 'border-emerald-500',
@@ -124,6 +128,13 @@ export default async function AdminDashboardPage() {
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Post Job</span>
+          </Link>
+          <Link
+            href="/admin/contact"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-navy-900 text-xs font-bold hover:bg-slate-50 transition shadow-sm"
+          >
+            <Phone className="w-3.5 h-3.5 text-gold-500" />
+            <span>Contact &amp; Social</span>
           </Link>
         </div>
       </div>

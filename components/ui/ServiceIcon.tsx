@@ -13,8 +13,13 @@ interface ServiceIconProps {
 export function ServiceIcon({ iconUrl, slug = '', name = '', className }: ServiceIconProps) {
   if (iconUrl) {
     return (
-      <div className={cn('relative w-9 h-9 shrink-0', className)}>
-        <Image src={iconUrl} alt={name || 'Service Icon'} fill className="object-contain" />
+      <div className={cn('relative w-9 h-9 shrink-0 rounded-full overflow-hidden', className)}>
+        <Image
+          src={iconUrl}
+          alt={name || 'Service Icon'}
+          fill
+          className="object-cover rounded-full scale-[1.02]"
+        />
       </div>
     );
   }

@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { HomepageSettings, Media } from '@/types/database';
 import { ImageUploadZone } from '@/components/media/ImageUploadZone';
-import { Save, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
+import { Save, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function HomepageAdminPage() {
   const [settings, setSettings] = useState<HomepageSettings | null>(null);
@@ -33,6 +34,7 @@ export default function HomepageAdminPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const supabase = createClient();
+  const { showToast } = useAdminToast();
 
   useEffect(() => {
     loadData();
@@ -109,8 +111,11 @@ export default function HomepageAdminPage() {
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
+      showToast('Homepage content updated successfully!');
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Failed to save homepage settings');
+      const msg = err?.message || 'Failed to save homepage settings';
+      setErrorMessage(msg);
+      showToast(msg, 'error');
     } finally {
       setIsSaving(false);
     }
@@ -145,12 +150,6 @@ export default function HomepageAdminPage() {
         </button>
       </div>
 
-      {saveSuccess && (
-        <div className="flex items-center gap-2 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-semibold">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Homepage content updated successfully!</span>
-        </div>
-      )}
 
       {errorMessage && (
         <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-semibold">

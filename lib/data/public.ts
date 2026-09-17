@@ -285,47 +285,153 @@ export async function getSiteStatistics(section: string = 'about'): Promise<Site
 export async function getAboutSettings(): Promise<AboutSettings | null> {
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    // Query the latest updated record directly
+    const { data: rawData, error } = await supabase
       .from('about_settings')
-      .select('*, banner_image:media!about_settings_banner_image_id_fkey(*)')
+      .select('*')
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    let result: any = data;
-    if (error || !result) {
-      const { data: rawData } = await supabase.from('about_settings').select('*').limit(1).maybeSingle();
-      result = rawData;
+    let result: any = rawData || {};
+
+    if (!result.banner_image && result.banner_image_id) {
+      const { data: mediaItem } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', result.banner_image_id)
+        .maybeSingle();
+      if (mediaItem) result.banner_image = mediaItem;
     }
 
-    if (result) {
-      if (!result.banner_image && result.banner_image_id) {
-        const { data: mediaItem } = await supabase
-          .from('media')
-          .select('*')
-          .eq('id', result.banner_image_id)
-          .maybeSingle();
-        if (mediaItem) result.banner_image = mediaItem;
-      }
+    if (!result.story_image && result.story_image_id) {
+      const { data: mediaItem } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', result.story_image_id)
+        .maybeSingle();
+      if (mediaItem) result.story_image = mediaItem;
+    }
 
-      // Resilient backup check in site_statistics
-      if (!result.banner_image) {
-        const { data: backupMedia } = await supabase
-          .from('site_statistics')
-          .select('*')
-          .eq('section', 'about_banner_media')
-          .eq('label', 'about_hero_banner')
-          .maybeSingle();
+    if (!result.cta_image && result.cta_image_id) {
+      const { data: mediaItem } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', result.cta_image_id)
+        .maybeSingle();
+      if (mediaItem) result.cta_image = mediaItem;
+    }
 
-        if (backupMedia && backupMedia.suffix) {
-          result.banner_image = {
-            id: backupMedia.value || 'backup',
-            secure_url: backupMedia.suffix,
-          } as any;
+    if (!result.team_image && result.team_image_id) {
+      const { data: mediaItem } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', result.team_image_id)
+        .maybeSingle();
+      if (mediaItem) result.team_image = mediaItem;
+    }
+
+    // Load media from site_statistics fallback (banner_image, story_image, team_image, cta_image)
+    const { data: pageMedia } = await supabase
+      .from('site_statistics')
+      .select('*')
+      .in('section', ['about_banner_media', 'about_page_media']);
+
+    if (pageMedia && pageMedia.length > 0) {
+      for (const item of pageMedia) {
+        if (!item.suffix) continue;
+        const mediaObj = {
+          id: item.value || item.id,
+          secure_url: item.suffix,
+          alt_text: item.label,
+        };
+
+        if ((item.label === 'about_hero_banner' || item.label === 'banner_image') && !result.banner_image) {
+          result.banner_image = mediaObj;
+        } else if (item.label === 'story_image') {
+          result.story_image = mediaObj;
+        } else if (item.label === 'team_image') {
+          result.team_image = mediaObj;
+        } else if (item.label === 'cta_image') {
+          result.cta_image = mediaObj;
         }
       }
     }
 
-    return result || null;
+    // Default values for newly added fields to ensure public page always renders exact content
+    const defaults = {
+      hero_eyebrow: 'ABOUT ALVERIC',
+      hero_feature_1_title: 'Quality Workmanship',
+      hero_feature_2_title: 'On-Time Delivery',
+      hero_feature_3_title: 'Client-Centric Approach',
+      hero_primary_button: 'Our Services',
+      hero_secondary_button: 'Get a Quote',
+      hero_trust_text: 'Trusted by 100+ clients across the UAE',
+      hero_overlay_label: 'ENGINEERING EXCELLENCE',
+      hero_overlay_title: 'Engineering Excellence for a Brighter Future',
+
+      story_eyebrow: 'OUR STORY',
+      story_heading: 'A Journey Built on Trust and Expertise',
+      story_button: 'Our Journey',
+      story_image_overlay_title: 'Creating Smarter Spaces for Better Lives',
+
+      mission_eyebrow: 'OUR PURPOSE',
+      mission_supporting_text: 'Focused on Progress. Driven by People.',
+
+      vision_eyebrow: 'OUR HORIZON',
+      vision_supporting_text: 'Setting New Standards in Contracting Excellence.',
+
+      values_items: [
+        { title: 'Integrity', description: "We do what's right, always." },
+        { title: 'Quality', description: 'We never compromise on standards.' },
+        { title: 'Safety', description: 'People and safety come first.' },
+        { title: 'Innovation', description: 'We embrace smarter solutions.' },
+      ],
+      values_link_text: 'Learn More About Our Values',
+
+      why_choose_eyebrow: 'WHY CHOOSE ALVERIC',
+      why_choose_heading: 'More Than a Contractor A Long-Term Partner',
+      why_choose_description:
+        'We bring together technical expertise, industry experience, and a commitment to excellence to deliver solutions that stand the test of time.',
+      why_choose_benefits: [
+        'Licensed & Certified Professionals',
+        'Comprehensive Project Management',
+        'Transparent Communication',
+        'Commitment to Quality & Safety',
+      ],
+      why_choose_button: 'Work With Us',
+      why_choose_image_overlay: 'Trusted Partner in Every Build',
+
+      certifications_eyebrow: 'OUR CERTIFICATIONS',
+      certifications_heading: 'Committed to Global Standards',
+      certifications_description:
+        'We follow internationally recognized standards to ensure quality, safety, and compliance in every project we deliver.',
+      certifications_items: [
+        { title: 'ISO 9001:2015' },
+        { title: 'UAE Municipality Compliant' },
+        { title: 'HSE Certified' },
+      ],
+
+      cta_eyebrow: "LET'S BUILD TOGETHER",
+      cta_heading: 'Ready to Bring Your Project to Life?',
+      cta_description:
+        'Partner with Alveric Technical Contracting and experience reliable, efficient, and high-quality contracting solutions.',
+      cta_primary_button: 'Get a Free Quote',
+      cta_secondary_button: 'Chat on WhatsApp',
+    };
+
+    // Filter out null/undefined values from result so defaults take effect if fields are not set
+    const cleanedResult = { ...result };
+    Object.keys(defaults).forEach((key) => {
+      if (cleanedResult[key] === null || cleanedResult[key] === undefined || cleanedResult[key] === '') {
+        cleanedResult[key] = (defaults as any)[key];
+      }
+    });
+
+    return {
+      ...defaults,
+      ...cleanedResult,
+    } as AboutSettings;
   } catch (err) {
     console.error('Error fetching about settings:', err);
     return null;

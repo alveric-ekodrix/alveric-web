@@ -18,11 +18,12 @@ import {
   Briefcase,
   Users,
   Inbox,
-  Image as ImageIcon,
+
   LogOut,
   Menu,
   X,
   Sparkles,
+  Phone,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,6 +53,7 @@ export function AdminSidebar() {
         { label: 'Home About & Showcase', href: '/admin/home-about', icon: Sparkles },
         { label: 'About Us Page', href: '/admin/about', icon: Info },
         { label: 'Company Settings', href: '/admin/settings', icon: Building },
+        { label: 'Contact & Social Links', href: '/admin/contact', icon: Phone },
       ],
     },
     {
@@ -62,10 +64,9 @@ export function AdminSidebar() {
       ],
     },
     {
-      title: 'Inquiries & Assets',
+      title: 'Inquiries',
       items: [
-        { label: 'Quote Inquiries', href: '/admin/inquiries', icon: Inbox },
-        { label: 'Media Library', href: '/admin/media', icon: ImageIcon },
+        { label: 'Inquiries & Leads', href: '/admin/inquiries', icon: Inbox },
       ],
     },
   ];

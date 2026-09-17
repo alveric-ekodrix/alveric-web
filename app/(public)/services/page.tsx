@@ -59,12 +59,22 @@ export default async function ServicesPage() {
                       fallbackText="Service image pending upload"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
-                    <div className="absolute top-4 left-4 z-10 w-12 h-12 rounded-xl bg-white/95 backdrop-blur-sm shadow-md flex items-center justify-center p-2.5">
+                    <div
+                      className={`absolute top-4 left-4 z-10 w-14 h-14 rounded-full flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-105 ${
+                        service.icon_media?.secure_url
+                          ? 'drop-shadow-md'
+                          : 'bg-white shadow-md border border-slate-200 p-2.5'
+                      }`}
+                    >
                       <ServiceIcon
                         iconUrl={service.icon_media?.secure_url}
                         slug={service.slug}
                         name={service.name}
-                        className="w-7 h-7"
+                        className={
+                          service.icon_media?.secure_url
+                            ? 'w-full h-full rounded-full'
+                            : 'w-7 h-7'
+                        }
                       />
                     </div>
                   </div>
