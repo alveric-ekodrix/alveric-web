@@ -24,7 +24,7 @@ import {
   Eye,
 } from 'lucide-react';
 
-export const EXACT_DESIGN_ABOUT = {
+const EXACT_DESIGN_ABOUT = {
   // Existing Base Fields
   heading: 'Building A Better Tomorrow',
   description:
