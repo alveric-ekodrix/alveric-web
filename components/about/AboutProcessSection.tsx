@@ -31,27 +31,28 @@ const EXECUTION_STEPS = [
 
 export function AboutProcessSection() {
   return (
-    <section className="py-20 lg:py-24 bg-white border-b border-slate-100">
+    <section className="py-20 lg:py-24 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/50 border-b border-slate-200/80 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
           <div>
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-500">
-              OUR METHODOLOGY
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 tracking-tight mt-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/25 text-gold-600 text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] mb-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-500" />
+              <span>OUR METHODOLOGY</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 tracking-tight">
               How We Deliver Every Project
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-lg">
+            <p className="text-xs sm:text-sm text-slate-500 mt-2.5 max-w-lg leading-relaxed">
               A structured four-phase execution model ensuring absolute technical precision, budget control, and timely milestone delivery.
             </p>
           </div>
 
           <Link
             href="/quote"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-300 bg-white text-navy-900 text-xs font-bold hover:border-navy-900 transition shadow-xs self-start md:self-auto"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-navy-900 bg-navy-900 text-white text-xs sm:text-sm font-bold hover:bg-navy-800 transition-all duration-200 shadow-md self-start md:self-auto group"
           >
             <span>Initiate Project Consultation</span>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+            <ArrowRight className="w-4 h-4 text-gold-400 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
@@ -59,13 +60,18 @@ export function AboutProcessSection() {
           {EXECUTION_STEPS.map((item, idx) => (
             <div
               key={idx}
-              className="relative bg-slate-50/70 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between group hover:bg-white hover:shadow-md hover:border-navy-900/30 transition-all duration-300"
+              className="relative bg-white p-7 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xl hover:-translate-y-1.5 hover:border-gold-500/40 flex flex-col justify-between group transition-all duration-300"
             >
               <div>
-                <span className="text-3xl font-black text-gold-500/80 block mb-4 font-mono">
-                  {item.step}
-                </span>
-                <h3 className="text-sm font-bold text-navy-900 mb-2 leading-snug">{item.title}</h3>
+                <div className="flex items-center justify-between mb-5">
+                  <span className="text-2xl sm:text-3xl font-black text-gold-500 font-mono tracking-wider">
+                    {item.step}
+                  </span>
+                  <div className="w-2 h-2 rounded-full bg-gold-400 group-hover:scale-150 transition-transform" />
+                </div>
+                <h3 className="text-base font-bold text-navy-900 mb-2 leading-snug group-hover:text-gold-600 transition-colors">
+                  {item.title}
+                </h3>
                 <p className="text-xs text-slate-500 leading-relaxed">{item.description}</p>
               </div>
             </div>

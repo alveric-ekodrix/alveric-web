@@ -50,15 +50,15 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full bg-white transition-all duration-300 border-b',
+        'sticky top-0 z-40 w-full bg-white border-b transition-[box-shadow,border-color] duration-200',
         isScrolled
-          ? 'shadow-md border-slate-200 py-1.5 sm:py-2'
-          : 'border-slate-100 py-2 sm:py-2.5'
+          ? 'shadow-md border-slate-200'
+          : 'border-slate-100'
       )}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex-shrink-0">
+        <div className="shrink-0 flex items-center">
           <AlvericLogo
             logoUrl={companySettings?.logo_media?.secure_url}
             variant="dark"
@@ -68,7 +68,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+        <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2 shrink-0">
           {navLinks.map((link) => {
             const isActive =
               link.href === '/'
@@ -156,7 +156,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
         </nav>
 
         {/* Right Action: Get a Quote */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4 shrink-0">
           {primaryPhone && (
             <a
               href={`tel:${primaryPhone.replace(/\s+/g, '')}`}
@@ -176,7 +176,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-2 lg:hidden shrink-0">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg text-navy-900 hover:bg-slate-100 transition"
