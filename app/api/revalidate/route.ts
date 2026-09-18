@@ -10,21 +10,35 @@ export async function POST(req: NextRequest) {
       // Body can be empty
     }
 
-    const path = body?.path;
-    if (path) {
-      revalidatePath(path);
-      revalidatePath(path, 'page');
+    const singlePath = body?.path;
+    const multiPaths: string[] = Array.isArray(body?.paths) ? body.paths : [];
+    const allPathsToRevalidate = new Set<string>();
+
+    if (singlePath && typeof singlePath === 'string') {
+      allPathsToRevalidate.add(singlePath);
+    }
+    for (const p of multiPaths) {
+      if (p && typeof p === 'string') {
+        allPathsToRevalidate.add(p);
+      }
     }
 
-    // Always revalidate /about and / by default
-    revalidatePath('/about');
-    revalidatePath('/about', 'page');
-    revalidatePath('/');
-    revalidatePath('/', 'page');
+    // Always revalidate homepage and default paths
+    allPathsToRevalidate.add('/');
+
+    for (const p of allPathsToRevalidate) {
+      try {
+        revalidatePath(p);
+        revalidatePath(p, 'page');
+        revalidatePath(p, 'layout');
+      } catch (err) {
+        console.warn(`Could not revalidate path ${p}:`, err);
+      }
+    }
 
     return NextResponse.json({
       revalidated: true,
-      path: path || '/about',
+      paths: Array.from(allPathsToRevalidate),
       now: Date.now(),
     });
   } catch (err: any) {

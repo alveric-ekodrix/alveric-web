@@ -5,7 +5,8 @@ import { ServiceIcon } from '@/components/ui/ServiceIcon';
 import { CldImageWrapper } from '@/components/media/CldImageWrapper';
 import { ArrowRight, Layers } from 'lucide-react';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function ServicesPage() {
   const services = await getPublishedServices();
