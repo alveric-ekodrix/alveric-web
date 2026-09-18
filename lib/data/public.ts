@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server';
+import { cache } from 'react';
+import { createPublicClient } from '@/lib/supabase/public';
 import {
   CompanySettings,
   HomepageSettings,
@@ -13,9 +14,9 @@ import {
   Job,
 } from '@/types/database';
 
-export async function getCompanySettings(): Promise<CompanySettings | null> {
+export const getCompanySettings = cache(async function getCompanySettings(): Promise<CompanySettings | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('company_settings')
       .select('*, logo_media:media!company_settings_logo_media_id_fkey(*)')
@@ -32,11 +33,11 @@ export async function getCompanySettings(): Promise<CompanySettings | null> {
     console.error('Error fetching company settings:', err);
     return null;
   }
-}
+});
 
-export async function getHomepageSettings(): Promise<HomepageSettings | null> {
+export const getHomepageSettings = cache(async function getHomepageSettings(): Promise<HomepageSettings | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('homepage_settings')
       .select('*, hero_image:media!homepage_settings_hero_image_id_fkey(*), cta_background_image:media!homepage_settings_cta_background_image_id_fkey(*)')
@@ -140,11 +141,11 @@ export async function getHomepageSettings(): Promise<HomepageSettings | null> {
     console.error('Error fetching homepage settings:', err);
     return null;
   }
-}
+});
 
-export async function getPublishedServices(): Promise<Service[]> {
+export const getPublishedServices = cache(async function getPublishedServices(): Promise<Service[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('services')
       .select('*, icon_media:media!services_icon_media_id_fkey(*), featured_image:media!services_featured_image_id_fkey(*)')
@@ -164,11 +165,11 @@ export async function getPublishedServices(): Promise<Service[]> {
     console.error('Error fetching published services:', err);
     return [];
   }
-}
+});
 
-export async function getPublishedServiceBySlug(slug: string): Promise<Service | null> {
+export const getPublishedServiceBySlug = cache(async function getPublishedServiceBySlug(slug: string): Promise<Service | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('services')
       .select('*, icon_media:media!services_icon_media_id_fkey(*), featured_image:media!services_featured_image_id_fkey(*)')
@@ -190,11 +191,11 @@ export async function getPublishedServiceBySlug(slug: string): Promise<Service |
     console.error(`Error fetching service by slug ${slug}:`, err);
     return null;
   }
-}
+});
 
-export async function getPublishedCategories(): Promise<ProjectCategory[]> {
+export const getPublishedCategories = cache(async function getPublishedCategories(): Promise<ProjectCategory[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('project_categories')
       .select('*')
@@ -207,11 +208,11 @@ export async function getPublishedCategories(): Promise<ProjectCategory[]> {
     console.error('Error fetching categories:', err);
     return [];
   }
-}
+});
 
-export async function getPublishedProjects(categoryId?: string): Promise<Project[]> {
+export const getPublishedProjects = cache(async function getPublishedProjects(categoryId?: string): Promise<Project[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     let query = supabase
       .from('projects')
       .select('*, category:project_categories(*), thumbnail_media:media!projects_thumbnail_media_id_fkey(*), featured_image:media!projects_featured_image_id_fkey(*)')
@@ -236,11 +237,11 @@ export async function getPublishedProjects(categoryId?: string): Promise<Project
     console.error('Error fetching projects:', err);
     return [];
   }
-}
+});
 
-export async function getPublishedProjectBySlug(slug: string): Promise<Project | null> {
+export const getPublishedProjectBySlug = cache(async function getPublishedProjectBySlug(slug: string): Promise<Project | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('projects')
       .select('*, category:project_categories(*), thumbnail_media:media!projects_thumbnail_media_id_fkey(*), featured_image:media!projects_featured_image_id_fkey(*)')
@@ -262,11 +263,11 @@ export async function getPublishedProjectBySlug(slug: string): Promise<Project |
     console.error(`Error fetching project ${slug}:`, err);
     return null;
   }
-}
+});
 
-export async function getSiteStatistics(section: string = 'about'): Promise<SiteStatistic[]> {
+export const getSiteStatistics = cache(async function getSiteStatistics(section: string = 'about'): Promise<SiteStatistic[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data, error } = await supabase
       .from('site_statistics')
       .select('*')
@@ -280,11 +281,11 @@ export async function getSiteStatistics(section: string = 'about'): Promise<Site
     console.error('Error fetching statistics:', err);
     return [];
   }
-}
+});
 
-export async function getAboutSettings(): Promise<AboutSettings | null> {
+export const getAboutSettings = cache(async function getAboutSettings(): Promise<AboutSettings | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     // Query the latest updated record directly
     const { data: rawData, error } = await supabase
       .from('about_settings')
@@ -436,21 +437,21 @@ export async function getAboutSettings(): Promise<AboutSettings | null> {
     console.error('Error fetching about settings:', err);
     return null;
   }
-}
+});
 
-export async function getWhyUsSettings(): Promise<WhyUsSettings | null> {
+export const getWhyUsSettings = cache(async function getWhyUsSettings(): Promise<WhyUsSettings | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase.from('why_us_settings').select('*').limit(1).maybeSingle();
     return data || null;
   } catch {
     return null;
   }
-}
+});
 
-export async function getWhyUsFeatures(): Promise<WhyUsFeature[]> {
+export const getWhyUsFeatures = cache(async function getWhyUsFeatures(): Promise<WhyUsFeature[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from('why_us_features')
       .select('*, icon_media:media!why_us_features_icon_media_id_fkey(*), image_media:media!why_us_features_image_media_id_fkey(*)')
@@ -460,11 +461,11 @@ export async function getWhyUsFeatures(): Promise<WhyUsFeature[]> {
   } catch {
     return [];
   }
-}
+});
 
-export async function getPublishedJobs(): Promise<Job[]> {
+export const getPublishedJobs = cache(async function getPublishedJobs(): Promise<Job[]> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from('jobs')
       .select('*')
@@ -474,11 +475,11 @@ export async function getPublishedJobs(): Promise<Job[]> {
   } catch {
     return [];
   }
-}
+});
 
-export async function getPublishedJobBySlug(slug: string): Promise<Job | null> {
+export const getPublishedJobBySlug = cache(async function getPublishedJobBySlug(slug: string): Promise<Job | null> {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from('jobs')
       .select('*')
@@ -489,4 +490,4 @@ export async function getPublishedJobBySlug(slug: string): Promise<Job | null> {
   } catch {
     return null;
   }
-}
+});

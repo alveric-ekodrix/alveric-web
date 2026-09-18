@@ -5,8 +5,7 @@ import { CldImageWrapper } from '@/components/media/CldImageWrapper';
 import { Building2, MapPin, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60;
 
 interface ProjectsPageProps {
   searchParams: Promise<{ category?: string }>;

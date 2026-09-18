@@ -13,8 +13,7 @@ import { AboutPillarsSection } from '@/components/about/AboutPillarsSection';
 import { AboutProcessSection } from '@/components/about/AboutProcessSection';
 import { AboutCtaSection } from '@/components/about/AboutCtaSection';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: 'About Us | Alveric Technical Contracting LLC',

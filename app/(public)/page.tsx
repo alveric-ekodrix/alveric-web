@@ -13,8 +13,8 @@ import { TrustBadgesSection } from '@/components/home/TrustBadgesSection';
 import { HomeProjectsSection } from '@/components/projects/HomeProjectsSection';
 import { HomeCtaSection } from '@/components/cta/HomeCtaSection';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// Pre-render and cache at edge, instantly revalidated on admin updates
+export const revalidate = 60;
 
 export default async function HomePage() {
   const [homepageSettings, services, statistics, projects] = await Promise.all([
