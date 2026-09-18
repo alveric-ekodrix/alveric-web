@@ -9,6 +9,7 @@ import {
   FileCheck,
   Star,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface TrustBadgeItem {
   icon: React.ElementType;
@@ -74,18 +75,21 @@ export function TrustBadgesSection() {
           </p>
         </div>
 
-        {/* 4 Cards Next to Each Other (2x2 on Mobile, 4 in a row on Desktop) */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-          {trustBadges.slice(0, 4).map((badge, idx) => (
-            <TrustCard key={idx} badge={badge} />
+        {/* Trust Badges Grid: All 5 cards in 1 row on laptop/desktop (min-[900px]:grid-cols-5), 2-col on mobile with the 5th card spanning full width */}
+        <div className="grid grid-cols-2 min-[900px]:grid-cols-5 gap-3 sm:gap-4 min-[900px]:gap-2.5 lg:gap-3.5 xl:gap-4">
+          {trustBadges.map((badge, idx) => (
+            <div
+              key={idx}
+              className={cn(
+                'h-full w-full',
+                idx === 4
+                  ? 'col-span-2 min-[900px]:col-span-1'
+                  : 'col-span-1'
+              )}
+            >
+              <TrustCard badge={badge} isLastOnMobile={idx === 4} />
+            </div>
           ))}
-        </div>
-
-        {/* 5th (Last) Card at the Bottom Centered */}
-        <div className="mt-3 sm:mt-4 lg:mt-5 flex justify-center">
-          <div className="w-full max-w-[calc(50%-0.375rem)] sm:max-w-xs lg:max-w-sm">
-            <TrustCard badge={trustBadges[4]} />
-          </div>
         </div>
 
         {/* Credibility Metric Bar: 2x2 grid on mobile, 4-cols on desktop */}
@@ -120,29 +124,45 @@ export function TrustBadgesSection() {
   );
 }
 
-function TrustCard({ badge }: { badge: TrustBadgeItem }) {
+function TrustCard({
+  badge,
+  isLastOnMobile = false,
+}: {
+  badge: TrustBadgeItem;
+  isLastOnMobile?: boolean;
+}) {
   const Icon = badge.icon;
   return (
-    <div className="group relative bg-navy-900/90 hover:bg-navy-900 border border-navy-800 hover:border-gold-500/50 rounded-2xl p-3 sm:p-5 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-gold-500/10 flex flex-col justify-between h-full">
+    <div
+      className={cn(
+        'group relative bg-navy-900/90 hover:bg-navy-900 border border-navy-800 hover:border-gold-500/50 rounded-2xl p-3.5 sm:p-4 min-[900px]:p-3 lg:p-3.5 xl:p-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-gold-500/10 flex flex-col justify-between h-full w-full',
+        isLastOnMobile ? 'sm:p-5' : ''
+      )}
+    >
       <div>
-        <div className="flex flex-wrap items-center justify-between gap-1.5 mb-2.5 sm:mb-3.5">
-          <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-navy-950 transition-all duration-300 shrink-0 shadow-inner">
-            <Icon className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:scale-110" />
+        <div className="flex items-center justify-between gap-1.5 mb-2.5 sm:mb-3">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 min-[900px]:w-8 min-[900px]:h-8 xl:w-9 xl:h-9 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-navy-950 transition-all duration-300 shrink-0 shadow-inner">
+            <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5 min-[900px]:w-4 min-[900px]:h-4 transition-transform duration-300 group-hover:scale-110" />
           </div>
-          <span className="text-[9px] sm:text-[11px] font-bold px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-navy-800/90 text-gold-300 border border-navy-700/80 whitespace-nowrap shrink-0">
+          <span className="text-[9px] sm:text-[10px] min-[900px]:text-[8.5px] lg:text-[9px] xl:text-[10px] font-bold px-2 py-0.5 rounded-full bg-navy-800/90 text-gold-300 border border-navy-700/80 whitespace-nowrap shrink-0">
             {badge.badge}
           </span>
         </div>
 
-        <h3 className="text-xs sm:text-base font-bold text-white group-hover:text-gold-300 transition-colors leading-tight sm:leading-snug">
+        <h3 className="text-xs sm:text-sm min-[900px]:text-[12.5px] lg:text-[13px] xl:text-sm font-bold text-white group-hover:text-gold-300 transition-colors leading-tight sm:leading-snug">
           {badge.title}
         </h3>
-        <p className="mt-1.5 sm:mt-2 text-[11px] sm:text-xs text-slate-300/80 leading-snug sm:leading-relaxed font-normal">
+        <p
+          className={cn(
+            'mt-1.5 sm:mt-2 text-[10.5px] sm:text-xs min-[900px]:text-[10.5px] lg:text-[11px] xl:text-xs text-slate-300/85 leading-snug font-normal',
+            isLastOnMobile ? 'max-w-xl' : ''
+          )}
+        >
           {badge.subtitle}
         </p>
       </div>
 
-      <div className="mt-3 sm:mt-4 pt-2 sm:pt-3 border-t border-navy-800 flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] font-semibold text-gold-400">
+      <div className="mt-3 sm:mt-4 pt-2 sm:pt-2.5 border-t border-navy-800/90 flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-[10.5px] min-[900px]:text-[9px] lg:text-[9.5px] font-semibold text-gold-400">
         <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-500 shrink-0" />
         <span>Verified Standard</span>
       </div>
