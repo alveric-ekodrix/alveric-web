@@ -123,6 +123,17 @@ export default function CompanySettingsAdminPage() {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
       showToast('Company settings saved successfully!');
+
+      // Instantly refresh public static edge cache
+      try {
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paths: ['/', '/about', '/services', '/projects', '/contact'] }),
+        });
+      } catch (e) {
+        console.warn('Revalidation trigger error:', e);
+      }
     } catch (err: any) {
       const msg = err?.message || 'Failed to save company settings';
       setErrorMessage(msg);

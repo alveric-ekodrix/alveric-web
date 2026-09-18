@@ -1,8 +1,8 @@
 import React from 'react';
 import { PublicLayoutWrapper } from '@/components/layout/PublicLayout';
 
-// All public pages are database-driven — always render dynamically at request time.
-export const dynamic = 'force-dynamic';
+// Enable ISR revalidation for instantaneous page delivery from edge cache
+export const revalidate = 60;
 
 export default function PublicRootLayout({ children }: { children: React.ReactNode }) {
   return <PublicLayoutWrapper>{children}</PublicLayoutWrapper>;

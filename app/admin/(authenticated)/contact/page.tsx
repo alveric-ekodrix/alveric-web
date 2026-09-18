@@ -114,6 +114,17 @@ export default function ContactSettingsAdminPage() {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
       showToast('Contact details, address, and social links saved successfully!');
+
+      // Instantly refresh public static edge cache
+      try {
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paths: ['/', '/about', '/services', '/projects', '/contact'] }),
+        });
+      } catch (e) {
+        console.warn('Revalidation trigger error:', e);
+      }
     } catch (err: any) {
       const msg = err?.message || 'Failed to save contact and social settings';
       setErrorMessage(msg);
