@@ -75,7 +75,7 @@ export function AdminSidebar() {
     <>
       {/* Mobile Top Bar */}
       <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-navy-950 text-white border-b border-navy-800 sticky top-0 z-40">
-        <AlvericLogo variant="light" showTagline={false} />
+        <AlvericLogo logoUrl="/logo/alveric-logo-white.png" variant="dark" size="sm" showTagline={false} />
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-navy-900"
@@ -93,7 +93,7 @@ export function AdminSidebar() {
       >
         {/* Header / Brand */}
         <div className="p-5 border-b border-navy-800 flex items-center justify-between">
-          <AlvericLogo variant="light" showTagline={false} />
+          <AlvericLogo logoUrl="/logo/alveric-logo-white.png" variant="dark" size="md" showTagline={false} />
           <button
             onClick={() => setMobileOpen(false)}
             className="lg:hidden p-1 text-slate-400 hover:text-white"

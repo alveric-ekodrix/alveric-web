@@ -23,6 +23,13 @@ export const metadata: Metadata = {
     siteName: 'Alveric Technical Contracting LLC',
     type: 'website',
   },
+  icons: {
+    icon: [
+      { url: '/logo/alveric-favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/logo/alveric-favicon.png',
+    apple: '/logo/alveric-favicon.png',
+  },
 };
 
 export default function RootLayout({

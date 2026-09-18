@@ -44,16 +44,17 @@ export function AboutPillarsSection({
   description,
 }: AboutPillarsSectionProps = {}) {
   return (
-    <section className="py-20 bg-slate-50/80 border-b border-slate-200">
+    <section className="py-20 lg:py-24 bg-white border-b border-slate-200/80 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-gold-500">
-            {eyebrow || 'STANDARDS & DISCIPLINE'}
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight mt-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/10 border border-gold-500/25 text-gold-600 text-[11px] sm:text-xs font-bold uppercase tracking-[0.18em] mb-2.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold-500" />
+            <span>{eyebrow || 'STANDARDS & DISCIPLINE'}</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 tracking-tight">
             {heading || 'The Four Pillars Behind Every Project We Deliver'}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-2">
+          <p className="text-xs sm:text-sm text-slate-500 mt-2.5 leading-relaxed">
             {description || 'Our systematic approach ensures that every contract is executed safely, reliably, and on schedule.'}
           </p>
         </div>
@@ -64,13 +65,15 @@ export function AboutPillarsSection({
             return (
               <div
                 key={idx}
-                className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                className="bg-slate-50/70 hover:bg-white p-7 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xl hover:-translate-y-1.5 hover:border-gold-500/40 transition-all duration-300 flex flex-col justify-between group"
               >
                 <div>
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 border ${pillar.color}`}>
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 border shadow-xs group-hover:scale-110 transition-transform ${pillar.color}`}>
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-base font-bold text-navy-900 mb-2">{pillar.title}</h3>
+                  <h3 className="text-base font-bold text-navy-900 mb-2 group-hover:text-gold-600 transition-colors">
+                    {pillar.title}
+                  </h3>
                   <p className="text-xs text-slate-500 leading-relaxed">{pillar.description}</p>
                 </div>
               </div>
