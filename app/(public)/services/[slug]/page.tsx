@@ -1,7 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Metadata } from 'next';
 import {
   getPublishedServiceBySlug,
@@ -24,13 +23,17 @@ import {
   Settings,
   FileText,
   Wrench,
-  Check,
-  CheckCircle,
+  Award,
   Lightbulb,
   Cpu,
   Shield,
-  Award,
+  Layers,
+  Sparkles,
+  Phone,
 } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 interface ServiceDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -48,6 +51,151 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
     title: `${service.seo_title || service.name} | Alveric Technical Contracting LLC`,
     description: service.seo_description || service.short_description || undefined,
   };
+}
+
+/**
+ * Parses markdown-style descriptions (headings, bullets, paragraphs)
+ * and turns them into clean, structured, premium Alveric UI components.
+ */
+function FormattedDescription({ content, serviceName }: { content?: string | null; serviceName: string }) {
+  if (!content) {
+    return (
+      <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+        Our {serviceName} contracting services cover complete engineering planning, professional installation,
+        system maintenance, and statutory compliance across commercial, residential, and industrial properties in the UAE.
+      </p>
+    );
+  }
+
+  const lines = content.split('\n');
+  const elements: React.ReactNode[] = [];
+  let currentBullets: string[] = [];
+  let currentParagraphLines: string[] = [];
+  let hasBullets = false;
+
+  function flushParagraph() {
+    if (currentParagraphLines.length > 0) {
+      const text = currentParagraphLines.join(' ').trim();
+      if (text) {
+        elements.push(
+          <p key={`p-${elements.length}`} className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            {text}
+          </p>
+        );
+      }
+      currentParagraphLines = [];
+    }
+  }
+
+  function flushBullets() {
+    if (currentBullets.length > 0) {
+      hasBullets = true;
+      const items = [...currentBullets];
+      elements.push(
+        <div key={`bullets-${elements.length}`} className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
+          {items.map((bullet, idx) => (
+            <div
+              key={idx}
+              className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/90 shadow-2xs hover:border-gold-500/40 hover:bg-white transition duration-200"
+            >
+              <CheckCircle2 className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <span className="text-xs sm:text-sm font-semibold text-navy-900 leading-snug">
+                {bullet}
+              </span>
+            </div>
+          ))}
+        </div>
+      );
+      currentBullets = [];
+    }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
+    const trimmed = rawLine.trim();
+
+    if (!trimmed) {
+      flushParagraph();
+      flushBullets();
+      continue;
+    }
+
+    // Check if heading: #, ##, ###, ####
+    if (/^#{1,4}\s+/.test(trimmed)) {
+      flushParagraph();
+      flushBullets();
+      const headingText = trimmed.replace(/^#{1,4}\s+/, '');
+      elements.push(
+        <div key={`h-${elements.length}`} className="pt-4 pb-1">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-4 rounded-full bg-gold-500 shrink-0" />
+            <h3 className="text-sm sm:text-base font-black text-navy-900 uppercase tracking-wide">
+              {headingText}
+            </h3>
+          </div>
+        </div>
+      );
+      continue;
+    }
+
+    // Check if bullet point: *, -, •
+    if (/^[*•-]\s+/.test(trimmed)) {
+      flushParagraph();
+      const bulletText = trimmed.replace(/^[*•-]\s+/, '');
+      currentBullets.push(bulletText);
+      continue;
+    }
+
+    // Normal line
+    if (currentBullets.length > 0) {
+      flushBullets();
+    }
+    currentParagraphLines.push(trimmed);
+  }
+
+  flushParagraph();
+  flushBullets();
+
+  return (
+    <div className="space-y-4">
+      {elements}
+
+      {/* If the description didn't provide bullets, show our default engineering scope checklist */}
+      {!hasBullets && (
+        <div className="pt-2 border-t border-slate-100">
+          <h3 className="text-xs font-extrabold uppercase tracking-wider text-navy-900 mb-4">
+            Scope &amp; Deliverables Checklist:
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <CheckCircle2 className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <span className="text-xs font-semibold text-slate-700 leading-snug">
+                Detailed site survey and engineering load analysis
+              </span>
+            </div>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <CheckCircle2 className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <span className="text-xs font-semibold text-slate-700 leading-snug">
+                Approved high-grade materials and manufacturer warranties
+              </span>
+            </div>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <CheckCircle2 className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <span className="text-xs font-semibold text-slate-700 leading-snug">
+                UAE Municipality &amp; Civil Defence code compliance
+              </span>
+            </div>
+            <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <CheckCircle2 className="w-4 h-4 text-gold-500 shrink-0 mt-0.5" />
+              <span className="text-xs font-semibold text-slate-700 leading-snug">
+                Testing, commissioning, and full handover documentation
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default async function ServiceDetailPage({ params }: ServiceDetailPageProps) {
@@ -99,7 +247,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       ]
     : isPlumbing
     ? [
-        { label: 'Pipe Fitting & Routing', icon: Zap },
+        { label: 'Pipe Routing & Fitting', icon: Zap },
         { label: 'Sanitary Fixtures', icon: Building2 },
         { label: 'Drainage Networks', icon: Cpu },
         { label: 'Leak & Pressure Testing', icon: FileText },
@@ -116,7 +264,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
     : [
         { label: 'Site Survey & Audit', icon: FileText },
         { label: 'Engineering Layout', icon: Cpu },
-        { label: 'Quality Installation', icon: Zap },
+        { label: 'Quality Execution', icon: Zap },
         { label: 'Safety Compliance', icon: ShieldCheck },
         { label: 'Testing & Handover', icon: Award },
       ];
@@ -133,69 +281,65 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
     : [
         {
           stepNumber: '01',
-          title: 'Site Survey',
-          description: 'We assess your requirements and analyze the site conditions.',
+          title: 'Site Survey & Consultation',
+          description: 'Our engineering specialists inspect the site, evaluate technical requirements, and define the complete scope.',
           icon: FileText,
         },
         {
           stepNumber: '02',
-          title: 'Planning & Design',
-          description: 'Our engineers design the optimal layout and calculate load requirements.',
+          title: 'Engineering & Planning',
+          description: 'We develop detailed schematics, calculate specifications, and prepare approvals compliant with UAE regulations.',
           icon: Settings,
         },
         {
           stepNumber: '03',
-          title: 'Execution',
-          description: 'Fast, professional installation with quality materials and strict safety measures.',
+          title: 'Precision Execution',
+          description: 'Execution by certified technicians using premium materials, adhering to strict safety and quality benchmarks.',
           icon: Wrench,
         },
         {
           stepNumber: '04',
           title: 'Testing & Handover',
-          description: 'Complete testing, documentation and final handover for a worry-free experience.',
+          description: 'Comprehensive testing, commissioning, quality sign-off, and formal documentation handover.',
           icon: CheckCircle2,
         },
       ];
-
-  // Secondary showcase image for Overview (pendant lamps / interior installation)
-  const overviewImage =
-    service.service_images && service.service_images.length > 0
-      ? service.service_images[0].media?.secure_url
-      : 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?auto=format&fit=crop&w=900&q=80';
-
-  // Villa night architectural photo for Dark CTA banner
-  const ctaVillaImage =
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80';
 
   return (
     <div className="w-full bg-white text-slate-800">
 
       {/* ========================================================= */}
-      {/* 1. HERO SECTION (Clean White Background, Split Layout)   */}
+      {/* 1. HERO SECTION (Signature Alveric Deep Navy & Gold)      */}
       {/* ========================================================= */}
-      <section className="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative bg-navy-950 text-white pt-8 pb-16 lg:pt-12 lg:pb-20 border-b border-navy-800 overflow-hidden">
+        {/* Subtle architectural tech grid pattern matching Home & About */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0B2239_1px,transparent_1px),linear-gradient(to_bottom,#0B2239_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-40 pointer-events-none" />
+
+        {/* Ambient radial lighting glow */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-gold-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Breadcrumbs */}
-          <nav aria-label="Breadcrumb" className="mb-4">
+          <nav aria-label="Breadcrumb" className="mb-6">
             <ol className="flex items-center space-x-2 text-xs text-slate-400">
               <li>
-                <Link href="/" className="hover:text-gold-600 transition">
+                <Link href="/" className="hover:text-gold-400 transition">
                   Home
                 </Link>
               </li>
               <li>
-                <ChevronRight className="w-3 h-3 text-slate-300" />
+                <ChevronRight className="w-3 h-3 text-slate-600" />
               </li>
               <li>
-                <Link href="/services" className="hover:text-gold-600 transition">
+                <Link href="/services" className="hover:text-gold-400 transition">
                   Services
                 </Link>
               </li>
               <li>
-                <ChevronRight className="w-3 h-3 text-slate-300" />
+                <ChevronRight className="w-3 h-3 text-slate-600" />
               </li>
-              <li className="text-slate-600 font-medium truncate max-w-[200px] sm:max-w-none">
+              <li className="text-gold-400 font-semibold truncate max-w-[200px] sm:max-w-none">
                 {service.name}
               </li>
             </ol>
@@ -203,68 +347,71 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
 
-            {/* Left Column: Title, Intro, Feature Badges, CTAs */}
+            {/* Left Column: Eyebrow, Title, Description, Highlight Pills, Action Buttons */}
             <div className="lg:col-span-7 space-y-6">
 
-              {/* Category Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-600 text-[11px] font-extrabold uppercase tracking-widest">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+              {/* Eyebrow Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold-500/15 border border-gold-500/30 text-gold-400 text-[11px] font-extrabold uppercase tracking-[0.2em] backdrop-blur-sm">
+                <span className="w-2 h-2 rounded-full bg-gold-400 animate-pulse" />
                 <span>
                   {isElectrical
-                    ? 'ELECTRICAL SOLUTIONS'
+                    ? 'ELECTRICAL CONTRACTING'
                     : isAc
-                    ? 'HVAC & COOLING SOLUTIONS'
+                    ? 'HVAC & COOLING SYSTEMS'
                     : isPlumbing
-                    ? 'PLUMBING & SANITARY'
+                    ? 'PLUMBING & SANITARY SCOPE'
                     : isPainting
-                    ? 'PAINTING & COATINGS'
-                    : `${service.name.toUpperCase()} SCOPE`}
+                    ? 'PAINTING & SURFACE FINISHES'
+                    : `${service.name.toUpperCase()} SOLUTIONS`}
                 </span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-navy-900 tracking-tight leading-[1.15]">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1] uppercase">
                 {service.name}
               </h1>
 
               {/* Subtitle Description */}
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-xl">
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl font-normal">
                 {service.short_description ||
-                  'Safe, reliable and efficient electrical systems for residential, commercial and industrial spaces. We handle everything from planning to installation, with full compliance and professional execution.'}
+                  `Engineered ${service.name.toLowerCase()} solutions executed by licensed specialists across commercial, residential, and industrial facilities in the UAE.`}
               </p>
 
-              {/* 3 Key Feature Badges in a Row */}
-              <div className="grid grid-cols-3 gap-3 pt-2 max-w-lg">
-                <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                  <div className="w-9 h-9 rounded-full bg-navy-950 text-white flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-4 h-4 text-gold-400" />
+              {/* 3 Key Alveric Feature Highlights */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-[11px] font-extrabold text-navy-900 leading-tight">
-                      Licensed &amp; Certified Engineers
-                    </h4>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                  <div className="w-9 h-9 rounded-full bg-navy-950 text-white flex items-center justify-center shrink-0">
-                    <Building2 className="w-4 h-4 text-gold-400" />
-                  </div>
-                  <div>
-                    <h4 className="text-[11px] font-extrabold text-navy-900 leading-tight">
+                    <h4 className="text-xs font-bold text-white leading-tight">
                       UAE Municipality Compliant
                     </h4>
+                    <span className="text-[10px] text-slate-400 block mt-0.5">Strict safety codes</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-                  <div className="w-9 h-9 rounded-full bg-navy-950 text-white flex items-center justify-center shrink-0">
-                    <Clock className="w-4 h-4 text-gold-400" />
+                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Award className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-[11px] font-extrabold text-navy-900 leading-tight">
-                      On-Time Project Delivery
+                    <h4 className="text-xs font-bold text-white leading-tight">
+                      Licensed Engineers
                     </h4>
+                    <span className="text-[10px] text-slate-400 block mt-0.5">Certified technicians</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white leading-tight">
+                      On-Time Delivery
+                    </h4>
+                    <span className="text-[10px] text-slate-400 block mt-0.5">Strict milestone schedule</span>
                   </div>
                 </div>
               </div>
@@ -273,10 +420,10 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
                 <a
                   href="#quote-card"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-extrabold text-xs tracking-wide shadow-sm hover:shadow transition group"
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-gold-500/20 hover:scale-[1.02] transition-all duration-200 group"
                 >
                   <span>Request a Free Quote</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
+                  <ArrowRight className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
                 </a>
 
                 {whatsappUrl && (
@@ -284,40 +431,62 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 text-slate-700 hover:text-emerald-800 font-bold text-xs transition"
+                    className="inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs sm:text-sm tracking-wide backdrop-blur-sm hover:scale-[1.02] transition-all duration-200"
                   >
-                    <MessageSquare className="w-4 h-4 text-emerald-600" />
+                    <MessageSquare className="w-4 h-4 text-emerald-400" />
                     <span>WhatsApp Inquiry</span>
                   </a>
                 )}
               </div>
             </div>
 
-            {/* Right Column: Hero Image with Floating Badge */}
+            {/* Right Column: Hero Visual Container */}
             <div className="lg:col-span-5 relative">
-              {/* Soft decorative background accent shape */}
-              <div className="absolute -inset-4 bg-gradient-to-tr from-slate-100 to-amber-500/10 rounded-[36px] -z-10 blur-xl opacity-70" />
+              {/* Outer decorative gold accent glow */}
+              <div className="absolute -inset-2 bg-gradient-to-tr from-gold-500/20 via-navy-800 to-gold-500/10 rounded-[32px] -z-10 blur-xl opacity-80" />
 
-              <div className="relative rounded-[28px] overflow-hidden shadow-xl border border-slate-100 bg-slate-100 aspect-[4/3.8]">
-                <CldImageWrapper
-                  src={service.featured_image?.secure_url}
-                  alt={service.name}
-                  fill
-                  fallbackText={service.name}
-                  className="w-full h-full object-cover"
-                />
-
-                {/* Floating Bottom-Right Badge Card */}
-                <div className="absolute bottom-4 right-4 z-10 flex items-center gap-3 p-3 sm:p-3.5 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl border border-white/60">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0">
-                    <Zap className="w-5 h-5 fill-amber-500 text-amber-500" />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-navy-800 bg-navy-900 aspect-[4/3.4]">
+                {service.featured_image?.secure_url ? (
+                  <CldImageWrapper
+                    src={service.featured_image.secure_url}
+                    alt={service.name}
+                    fill
+                    fallbackText={service.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-center">
+                    <div className="w-20 h-20 rounded-2xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-4 shadow-inner">
+                      <ServiceIcon
+                        iconUrl={service.icon_media?.secure_url}
+                        slug={service.slug}
+                        name={service.name}
+                        className="w-10 h-10"
+                      />
+                    </div>
+                    <h3 className="text-lg font-black text-white tracking-tight uppercase">
+                      {service.name}
+                    </h3>
+                    <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                      Alveric Technical Contracting LLC
+                    </p>
                   </div>
-                  <div>
-                    <h4 className="text-xs font-black text-navy-900 leading-tight">
-                      Powering Safer Spaces
+                )}
+
+                {/* Subtle vignette over image */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-transparent pointer-events-none" />
+
+                {/* Floating Bottom Badge Card */}
+                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-navy-950/90 backdrop-blur-md shadow-xl border border-white/15">
+                  <div className="w-10 h-10 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-5 h-5 text-gold-400" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-xs font-black text-white leading-tight truncate">
+                      Engineered Quality &amp; Precision
                     </h4>
-                    <p className="text-[10px] text-slate-500 leading-tight mt-0.5">
-                      Expert {service.name} Solutions
+                    <p className="text-[10px] text-slate-300 leading-tight mt-0.5 truncate">
+                      Alveric Technical Contracting LLC
                     </p>
                   </div>
                 </div>
@@ -326,25 +495,28 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
           </div>
         </div>
+
+        {/* Bottom gold accent dividing strip */}
+        <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-gold-500 via-gold-400 to-gold-600 shadow-sm" />
       </section>
 
       {/* ========================================================= */}
       {/* 2. CAPABILITIES / SCOPES 5-ICON RIBBON BAR                 */}
       {/* ========================================================= */}
-      <section className="border-y border-slate-200/80 bg-slate-50/50 py-5">
+      <section className="border-b border-slate-200 bg-slate-50/80 py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 divide-y sm:divide-y-0 lg:divide-x divide-slate-200">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {capabilities.map((cap, i) => {
               const IconComponent = cap.icon;
               return (
                 <div
                   key={i}
-                  className="flex flex-col items-center text-center justify-center p-2.5 group"
+                  className="flex flex-col items-center text-center justify-center p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs hover:border-gold-500/50 hover:shadow-sm transition-all duration-200 group"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 shadow-xs flex items-center justify-center text-navy-900 group-hover:text-gold-600 group-hover:border-gold-500/50 transition-all duration-200 mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-navy-50 text-navy-900 border border-navy-100 flex items-center justify-center group-hover:bg-navy-900 group-hover:text-gold-400 group-hover:border-navy-900 transition-all duration-200 mb-2 shadow-2xs">
                     <IconComponent className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-navy-900 group-hover:text-gold-600 transition-colors">
+                  <span className="text-xs font-bold text-navy-900 group-hover:text-gold-600 transition-colors leading-tight">
                     {cap.label}
                   </span>
                 </div>
@@ -355,36 +527,101 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       </section>
 
       {/* ========================================================= */}
-      {/* 3. SERVICE OVERVIEW SECTION (Text + Landscape Image)      */}
+      {/* 3. SERVICE OVERVIEW SECTION (100% Image-Free & Clean)      */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-18 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
 
-            {/* Left Description Column */}
-            <div className="lg:col-span-7 space-y-4">
-              <div className="flex items-center gap-2.5">
-                <span className="w-1.5 h-6 rounded-full bg-gold-500 inline-block shrink-0" />
-                <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
-                  Service Overview
-                </h2>
+            {/* Left Column: Parsed Rich Service Description & Bullet Cards */}
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-500 block mb-1">
+                  TECHNICAL SCOPE
+                </span>
+                <div className="flex items-center gap-2.5">
+                  <span className="w-1.5 h-7 rounded-full bg-gold-500 inline-block shrink-0" />
+                  <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
+                    Service Overview
+                  </h2>
+                </div>
               </div>
 
-              <div className="text-slate-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line space-y-3 pt-1">
-                {service.description ||
-                  `Our ${service.name} services cover complete electrical installations, system layouts, panel wiring, lighting, and maintenance for all types of buildings. We work with precision, follow safety standards, and ensure long-term reliability.\n\nFrom modern residential villas and multi-unit towers to commercial facilities and industrial plants, our licensed engineers coordinate each execution phase with seamless efficiency and uncompromising adherence to UAE civil defence and municipal regulations.`}
-              </div>
+              {/* Rich Markdown Parser Component */}
+              <FormattedDescription content={service.description} serviceName={service.name} />
             </div>
 
-            {/* Right Overview Landscape Image */}
+            {/* Right Column: Alveric Engineering Standards Card (NO IMAGE AT ALL) */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl overflow-hidden shadow-lg border border-slate-100 aspect-[16/10] bg-slate-100">
-                <Image
-                  src={overviewImage}
-                  alt={`${service.name} Overview`}
-                  fill
-                  className="w-full h-full object-cover"
-                />
+              <div className="rounded-2xl bg-navy-950 text-white p-7 sm:p-8 border border-navy-800 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-gold-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-gold-400" />
+                  <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-gold-400">
+                    ALVERIC ASSURANCE
+                  </span>
+                </div>
+                
+                <h3 className="text-xl font-black text-white tracking-tight mb-2">
+                  Technical Standards &amp; Compliance
+                </h3>
+                <p className="text-xs text-slate-300 leading-relaxed mb-6">
+                  Every {service.name} project is executed in full compliance with UAE regulatory authorities and strict international engineering codes.
+                </p>
+
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3.5 pb-4 border-b border-navy-800">
+                    <div className="w-9 h-9 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">Full Authority Clearances</h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5">Compliant with UAE Municipality, Civil Defence, and utility standards.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 pb-4 border-b border-navy-800">
+                    <div className="w-9 h-9 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
+                      <Users className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">Licensed Technical Supervisors</h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5">Qualified project engineers overseeing every execution milestone on-site.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5 pb-4 border-b border-navy-800">
+                    <div className="w-9 h-9 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
+                      <Cpu className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">100% Certified Materials</h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5">Only genuine, tested, and manufacturer-approved components &amp; equipment.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-9 h-9 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0 border border-gold-500/30">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white">Milestone &amp; Handover Guarantee</h4>
+                      <p className="text-[11px] text-slate-400 mt-0.5">Structured timelines with zero hidden fees and formal testing sign-off.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-navy-800 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-slate-300">Need a site inspection?</span>
+                  <a
+                    href="#quote-card"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-gold-400 hover:text-gold-300 transition"
+                  >
+                    <span>Request Survey</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -395,48 +632,51 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       {/* ========================================================= */}
       {/* 4. OUR PROCESS + GET A QUOTE CARD (Two Columns)           */}
       {/* ========================================================= */}
-      <section className="py-12 sm:py-16 bg-slate-50/50 border-t border-slate-200/80">
+      <section className="py-16 sm:py-20 bg-slate-50 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
 
             {/* Left Column: Our Process Stepper */}
             <div className="lg:col-span-7 space-y-6">
               <div>
+                <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-500 block mb-1">
+                  WORKFLOW &amp; METHODOLOGY
+                </span>
                 <div className="flex items-center gap-2.5 mb-1.5">
-                  <span className="w-1.5 h-6 rounded-full bg-gold-500 inline-block shrink-0" />
+                  <span className="w-1.5 h-7 rounded-full bg-gold-500 inline-block shrink-0" />
                   <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
-                    Our Process
+                    How We Execute Your Project
                   </h2>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  A simple and transparent workflow to deliver the best results.
+                  A structured, transparent engineering process designed to deliver exceptional quality on schedule.
                 </p>
               </div>
 
               {/* Vertical Process Timeline */}
-              <div className="relative pt-3 space-y-6">
+              <div className="relative pt-3 space-y-5">
                 {/* Connecting Vertical Line */}
-                <div className="absolute left-[17px] top-6 bottom-6 w-0.5 bg-slate-200 border-l border-dashed border-slate-300 -z-0" />
+                <div className="absolute left-[19px] top-6 bottom-6 w-0.5 bg-slate-200 border-l border-dashed border-slate-300 -z-0" />
 
                 {processSteps.map((step, idx) => {
                   const StepIcon = step.icon;
                   return (
                     <div key={idx} className="relative z-10 flex items-start gap-4 sm:gap-5 group">
                       {/* Step Number Dot */}
-                      <div className="w-9 h-9 rounded-full bg-gold-500 text-navy-950 font-black text-xs flex items-center justify-center shrink-0 shadow-sm border-2 border-white">
+                      <div className="w-10 h-10 rounded-xl bg-navy-950 text-gold-400 font-black text-xs flex items-center justify-center shrink-0 shadow-md border-2 border-white group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
                         {step.stepNumber}
                       </div>
 
                       {/* Step Content Card */}
-                      <div className="flex-1 flex items-start gap-3.5 p-4 rounded-xl bg-white border border-slate-200/90 shadow-2xs group-hover:border-gold-500/40 transition">
+                      <div className="flex-1 flex items-start gap-3.5 p-4 sm:p-5 rounded-xl bg-white border border-slate-200/90 shadow-2xs group-hover:border-gold-500/40 group-hover:shadow-sm transition">
                         <div className="w-9 h-9 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center shrink-0">
-                          <StepIcon className="w-4 h-4" />
+                          <StepIcon className="w-4 h-4 text-gold-600" />
                         </div>
-                        <div className="space-y-0.5">
-                          <h3 className="text-xs sm:text-sm font-extrabold text-navy-900">
+                        <div className="space-y-1">
+                          <h3 className="text-sm font-extrabold text-navy-900">
                             {step.title}
                           </h3>
-                          <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">
+                          <p className="text-xs text-slate-500 leading-relaxed">
                             {step.description}
                           </p>
                         </div>
@@ -447,7 +687,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               </div>
             </div>
 
-            {/* Right Column: Get a Quote Card */}
+            {/* Right Column: Sticky Quote Card */}
             <div className="lg:col-span-5 lg:sticky lg:top-24">
               <ServiceDetailQuoteCard
                 serviceId={service.id}
@@ -463,70 +703,70 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       {/* ========================================================= */}
       {/* 5. WHY CHOOSE US SECTION (4 Clean Cards Grid)             */}
       {/* ========================================================= */}
-      <section className="py-14 sm:py-18 bg-white border-t border-slate-200/80">
+      <section className="py-16 sm:py-20 bg-white border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <div className="flex items-center gap-2.5 mb-1.5">
-              <span className="w-1.5 h-6 rounded-full bg-gold-500 inline-block shrink-0" />
-              <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
-                Why Choose Us
-              </h2>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Quality workmanship, safety compliance and complete project support.
+          <div className="mb-10 text-center max-w-2xl mx-auto">
+            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-500 block mb-1">
+              THE ALVERIC ADVANTAGE
+            </span>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-navy-900 tracking-tight">
+              Why Choose Alveric for {service.name}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-2">
+              Engineering leadership, certified field technicians, and uncompromised safety compliance.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Card 1 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/80 flex items-center justify-center text-navy-900 mb-3.5">
-                <Shield className="w-6 h-6 text-navy-900" />
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
+                <Shield className="w-6 h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1">
-                UAE Compliant
+              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+                UAE Regulatory Compliance
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                All works as per municipality regulations
+                All contracting adheres strictly to regional civil defence, municipal, and health &amp; safety standards.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/80 flex items-center justify-center text-navy-900 mb-3.5">
-                <Users className="w-6 h-6 text-navy-900" />
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
+                <Users className="w-6 h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1">
-                Experienced Team
+              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+                Certified Engineering Staff
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Certified and skilled electricians
+                Multi-disciplinary technicians with verified technical credentials and continuous safety training.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/80 flex items-center justify-center text-navy-900 mb-3.5">
-                <CheckCircle2 className="w-6 h-6 text-navy-900" />
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
+                <CheckCircle2 className="w-6 h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1">
-                Quality Materials
+              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+                Quality Materials Only
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                100% genuine &amp; trusted brands
+                100% genuine components and durable parts procured exclusively from certified manufacturers.
               </p>
             </div>
 
             {/* Card 4 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-200/80 flex items-center justify-center text-navy-900 mb-3.5">
-                <Clock className="w-6 h-6 text-navy-900" />
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
+                <Clock className="w-6 h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1">
-                On-Time Delivery
+              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+                Strict On-Time Delivery
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                We value your time
+                Disciplined project scheduling ensures milestones are achieved without costly project delays.
               </p>
             </div>
           </div>
@@ -534,46 +774,38 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       </section>
 
       {/* ========================================================= */}
-      {/* 6. DARK CTA BANNER ("Let's Power Your Next Project")       */}
+      {/* 6. ALVERIC BRANDED DARK CTA BANNER (No Stock Photos)      */}
       {/* ========================================================= */}
       <section className="py-12 lg:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-navy-950 min-h-[300px] flex items-center border border-navy-800">
-            {/* Background architectural photo with dark gradient overlay */}
-            <div className="absolute inset-0 z-0">
-              <Image
-                src={ctaVillaImage}
-                alt="Architectural Project"
-                fill
-                className="object-cover opacity-35 object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/90 to-transparent" />
-            </div>
+          <div className="relative rounded-3xl bg-navy-950 overflow-hidden shadow-2xl p-8 sm:p-12 lg:p-14 border border-navy-800">
+            {/* Subtle tech grid background pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#0B2239_1px,transparent_1px),linear-gradient(to_bottom,#0B2239_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-35 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-80 h-80 bg-gold-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 p-8 sm:p-12 lg:p-14 max-w-2xl space-y-4">
-              {/* Pill Tag */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/15 border border-gold-500/30 text-gold-400 text-[10px] font-extrabold uppercase tracking-widest">
-                <Zap className="w-3 h-3 fill-gold-400 text-gold-400" />
-                <span>
-                  {isElectrical ? 'NEED ELECTRICAL SOLUTIONS' : `NEED ${service.name.toUpperCase()}`}
-                </span>
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+              <div className="max-w-2xl space-y-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/15 border border-gold-500/30 text-gold-400 text-[10px] font-extrabold uppercase tracking-widest">
+                  <Zap className="w-3 h-3 fill-gold-400 text-gold-400" />
+                  <span>NEED {service.name.toUpperCase()}?</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+                  Let&apos;s Build &amp; Power Your Next Project Together
+                </h2>
+
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+                  Connect with our licensed engineering team for detailed technical proposals, site inspections, and competitive contracting estimates across the UAE.
+                </p>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
-                Let&apos;s Power Your Next Project
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-lg">
-                From small installations to large-scale projects, we&apos;re here to help.
-              </p>
-
-              <div className="flex flex-wrap items-center gap-3.5 pt-2">
+              <div className="flex flex-wrap items-center gap-3.5 shrink-0">
                 <a
                   href="#quote-card"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-extrabold text-xs tracking-wide shadow transition group"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-gold-500/20 hover:scale-[1.02] transition-all duration-200 group"
                 >
-                  <span>Get a Free Quote</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
+                  <span>Request a Free Quote</span>
+                  <ArrowRight className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
                 </a>
 
                 {whatsappUrl && (
@@ -581,7 +813,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs border border-white/20 transition"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 backdrop-blur-sm hover:scale-[1.02] transition-all duration-200"
                   >
                     <MessageSquare className="w-4 h-4 text-emerald-400" />
                     <span>WhatsApp Us</span>
@@ -594,21 +826,24 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       </section>
 
       {/* ========================================================= */}
-      {/* 7. RELATED SERVICES SECTION (5 Compact Cards in a Row)    */}
+      {/* 7. RELATED SERVICES SECTION (Clean Alveric Cards)         */}
       {/* ========================================================= */}
       {relatedServices.length > 0 && (
-        <section className="py-12 sm:py-16 bg-white border-t border-slate-200/80">
+        <section className="py-14 sm:py-18 bg-slate-50 border-t border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-end justify-between mb-8 gap-4">
               <div>
-                <div className="flex items-center gap-2.5 mb-1.5">
+                <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-500 block mb-1">
+                  MORE EXPERTISE
+                </span>
+                <div className="flex items-center gap-2.5 mb-1">
                   <span className="w-1.5 h-6 rounded-full bg-gold-500 inline-block shrink-0" />
                   <h2 className="text-2xl sm:text-3xl font-black text-navy-900 tracking-tight">
                     Related Services
                   </h2>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Explore our other contracting and maintenance services.
+                  Explore other specialized contracting disciplines delivered by Alveric.
                 </p>
               </div>
 
@@ -626,7 +861,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 <Link
                   key={other.id}
                   href={`/services/${other.slug}`}
-                  className="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-300"
+                  className="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-1 transition-all duration-300"
                 >
                   {/* Top Image */}
                   <div className="relative h-32 w-full bg-slate-100 overflow-hidden">
@@ -640,12 +875,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                   </div>
 
                   {/* Card Title & Arrow */}
-                  <div className="p-3 flex flex-col flex-1 justify-between">
+                  <div className="p-3.5 flex flex-col flex-1 justify-between">
                     <h3 className="text-xs font-black text-navy-900 group-hover:text-gold-600 transition-colors leading-snug line-clamp-2 mb-2">
                       {other.name}
                     </h3>
                     <div className="flex items-center text-gold-500 text-xs font-bold pt-1">
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      <span className="text-[11px] group-hover:underline">Explore</span>
+                      <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </Link>
