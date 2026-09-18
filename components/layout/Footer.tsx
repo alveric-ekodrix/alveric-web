@@ -61,8 +61,9 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
           {/* Column 1: Brand & Socials (Always visible) */}
           <div className="space-y-4">
             <AlvericLogo
-              logoUrl={companySettings?.logo_media?.secure_url}
-              variant="light"
+              logoUrl="/logo/alveric-logo-white.png"
+              variant="dark"
+              size="md"
               showTagline={false}
             />
             <p className="text-xs font-semibold text-gold-400 tracking-wider uppercase">

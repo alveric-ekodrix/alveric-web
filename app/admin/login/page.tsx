@@ -62,7 +62,7 @@ function LoginForm() {
     <div className="min-h-screen flex flex-col justify-center items-center bg-slate-100 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200/80 p-8 space-y-6">
         <div className="flex flex-col items-center text-center space-y-2">
-          <AlvericLogo variant="dark" showTagline={false} />
+          <AlvericLogo variant="dark" size="md" showTagline={false} />
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-navy-50 text-navy-900 text-xs font-bold mt-2">
             <Shield className="w-3.5 h-3.5 text-gold-500" />
             <span>Administrator Access Portal</span>
