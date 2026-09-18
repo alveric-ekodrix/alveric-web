@@ -112,6 +112,17 @@ export default function HomepageAdminPage() {
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4000);
       showToast('Homepage content updated successfully!');
+
+      // Instantly refresh public static edge cache
+      try {
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ paths: ['/'] }),
+        });
+      } catch (e) {
+        console.warn('Revalidation trigger error:', e);
+      }
     } catch (err: any) {
       const msg = err?.message || 'Failed to save homepage settings';
       setErrorMessage(msg);
