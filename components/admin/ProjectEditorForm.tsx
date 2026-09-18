@@ -7,7 +7,8 @@ import { Project, ProjectCategory, Service, Media } from '@/types/database';
 import { projectFormSchema } from '@/lib/validations';
 import { slugify } from '@/lib/utils';
 import { ImageUploadZone } from '@/components/media/ImageUploadZone';
-import { Save, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
+import { Save, AlertCircle, Loader2, CheckCircle2, Trash2 } from 'lucide-react';
+import { DeleteConfirmModal } from '@/components/admin/DeleteConfirmModal';
 
 interface ProjectEditorFormProps {
   initialData?: Project | null;
@@ -46,7 +47,38 @@ export function ProjectEditorForm({ initialData, isEditing = false }: ProjectEdi
 
   const [isLoadingMetadata, setIsLoadingMetadata] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleDeleteConfirm() {
+    if (!initialData?.id) return;
+    setIsDeleting(true);
+
+    try {
+      const { error } = await supabase.from('projects').delete().eq('id', initialData.id);
+      if (error) throw error;
+
+      try {
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            paths: ['/', '/projects', `/projects/${initialData.slug}`],
+          }),
+        });
+      } catch (revErr) {
+        console.warn('Revalidation notice:', revErr);
+      }
+
+      router.push('/admin/projects');
+      router.refresh();
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'Failed to delete project');
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+    }
+  }
 
   useEffect(() => {
     loadFormDependencies();
@@ -440,13 +472,25 @@ export function ProjectEditorForm({ initialData, isEditing = false }: ProjectEdi
 
       {/* Action Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-200">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
-        >
-          Cancel
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="px-5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
+          >
+            Cancel
+          </button>
+          {isEditing && initialData?.id && (
+            <button
+              type="button"
+              onClick={() => setShowDeleteModal(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-bold hover:bg-red-100 transition"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Project</span>
+            </button>
+          )}
+        </div>
 
         <button
           type="submit"
@@ -457,6 +501,24 @@ export function ProjectEditorForm({ initialData, isEditing = false }: ProjectEdi
           <span>{isEditing ? 'Save Changes' : 'Publish Project'}</span>
         </button>
       </div>
+
+      {/* Confirmation Modal */}
+      <DeleteConfirmModal
+        isOpen={showDeleteModal}
+        title="Delete Project"
+        message={
+          <>
+            Are you sure you want to delete <span className="font-bold text-navy-900">&quot;{title || 'this project'}&quot;</span>?
+            This will permanently remove the case study from the public portfolio and home page.
+          </>
+        }
+        confirmText="Delete Project"
+        isDeleting={isDeleting}
+        onConfirm={handleDeleteConfirm}
+        onClose={() => {
+          if (!isDeleting) setShowDeleteModal(false);
+        }}
+      />
 
     </form>
   );
