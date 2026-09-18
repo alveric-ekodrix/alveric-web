@@ -94,14 +94,14 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
               {projects.map((project) => (
                 <Link
                   key={project.id}
                   href={`/projects/${project.slug}`}
-                  className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  className="group flex flex-col bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="relative h-60 w-full bg-slate-100 overflow-hidden">
+                  <div className="relative h-36 sm:h-48 lg:h-60 w-full bg-slate-100 overflow-hidden">
                     <CldImageWrapper
                       src={project.thumbnail_media?.secure_url || project.featured_image?.secure_url}
                       alt={project.title}
@@ -110,28 +110,28 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
                     {project.category && (
-                      <div className="absolute top-3 left-3 bg-navy-900/85 backdrop-blur-sm text-white px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
+                      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-navy-900/85 backdrop-blur-sm text-white px-2 sm:px-2.5 py-0.5 sm:py-1 rounded text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">
                         {project.category.name}
                       </div>
                     )}
                   </div>
 
-                  <div className="p-6 flex flex-col flex-1">
-                    <h2 className="text-base font-black text-navy-900 group-hover:text-gold-600 transition-colors line-clamp-1 mb-2">
+                  <div className="p-3 sm:p-5 lg:p-6 flex flex-col flex-1">
+                    <h2 className="text-xs sm:text-base font-black text-navy-900 group-hover:text-gold-600 transition-colors line-clamp-2 sm:line-clamp-1 mb-1.5 sm:mb-2">
                       {project.title}
                     </h2>
                     {project.location && (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-3">
-                        <MapPin className="w-3.5 h-3.5 text-gold-500 shrink-0" />
-                        <span>{project.location}</span>
+                      <div className="flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs text-slate-500 mb-2 sm:mb-3">
+                        <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-500 shrink-0" />
+                        <span className="line-clamp-1">{project.location}</span>
                       </div>
                     )}
-                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4 flex-1">
+                    <p className="hidden sm:block text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4 flex-1">
                       {project.short_description || 'Technical contracting project delivered with precision and high-grade materials.'}
                     </p>
-                    <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs font-bold text-navy-900 group-hover:text-gold-600 transition">
-                      <span>View Project Case Study</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-gold-500 group-hover:translate-x-1 transition-transform" />
+                    <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-slate-100 text-[10px] sm:text-xs font-bold text-navy-900 group-hover:text-gold-600 transition">
+                      <span>View Project</span>
+                      <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-500 group-hover:translate-x-1 transition-transform shrink-0" />
                     </div>
                   </div>
                 </Link>

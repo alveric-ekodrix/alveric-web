@@ -75,19 +75,24 @@ export function TrustBadgesSection() {
           </p>
         </div>
 
-        {/* Trust Badges Grid: All 5 cards in 1 row on laptop/desktop (min-[900px]:grid-cols-5), 2-col on mobile with the 5th card spanning full width */}
-        <div className="grid grid-cols-2 min-[900px]:grid-cols-5 gap-3 sm:gap-4 min-[900px]:gap-2.5 lg:gap-3.5 xl:gap-4">
+        {/* Trust Badges:
+            - Mobile: horizontal scroll row (all 5 side by side, swipeable)
+            - Laptop+: 5-column grid */}
+
+        {/* Mobile scroll strip — hidden on 900px+ */}
+        <div className="flex min-[900px]:hidden gap-3 overflow-x-auto pb-2 snap-x snap-mandatory no-scrollbar -mx-1 px-1">
           {trustBadges.map((badge, idx) => (
-            <div
-              key={idx}
-              className={cn(
-                'h-full w-full',
-                idx === 4
-                  ? 'col-span-2 min-[900px]:col-span-1'
-                  : 'col-span-1'
-              )}
-            >
-              <TrustCard badge={badge} isLastOnMobile={idx === 4} />
+            <div key={idx} className="snap-start shrink-0 w-[170px]">
+              <TrustCard badge={badge} isLastOnMobile={false} />
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop 5-col grid — hidden below 900px */}
+        <div className="hidden min-[900px]:grid min-[900px]:grid-cols-5 gap-2.5 lg:gap-3.5 xl:gap-4">
+          {trustBadges.map((badge, idx) => (
+            <div key={idx} className="h-full w-full">
+              <TrustCard badge={badge} isLastOnMobile={false} />
             </div>
           ))}
         </div>

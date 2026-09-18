@@ -18,6 +18,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
@@ -35,6 +36,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
   useEffect(() => {
     setMobileMenuOpen(false);
     setServicesDropdownOpen(false);
+    setMobileServicesOpen(false);
   }, [pathname]);
 
   const navLinks = [
@@ -198,37 +200,78 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
 
             return (
               <div key={link.href}>
-                <Link
-                  href={link.href}
-                  className={cn(
-                    'block px-3 py-2.5 rounded-lg text-base font-semibold transition',
-                    isActive
-                      ? 'bg-navy-50 text-navy-900 font-bold border-l-4 border-gold-500'
-                      : 'text-navy-900/80 hover:bg-slate-50 hover:text-navy-900'
-                  )}
-                >
-                  {link.label}
-                </Link>
-                {link.hasDropdown && services.length > 0 && (
-                  <div className="pl-6 pr-2 py-1 space-y-1">
-                    {services.slice(0, 6).map((service) => (
+                {link.hasDropdown ? (
+                  <div>
+                    {/* Services row: link + chevron toggle */}
+                    <div className="flex items-center">
                       <Link
-                        key={service.id}
-                        href={`/services/${service.slug}`}
-                        className="block py-1.5 text-xs text-slate-600 hover:text-gold-600"
+                        href={link.href}
+                        className={cn(
+                          'flex-1 px-3 py-2.5 rounded-l-lg text-base font-semibold transition',
+                          isActive
+                            ? 'bg-navy-50 text-navy-900 font-bold border-l-4 border-gold-500'
+                            : 'text-navy-900/80 hover:bg-slate-50 hover:text-navy-900'
+                        )}
                       >
-                        • {service.name}
+                        {link.label}
                       </Link>
-                    ))}
-                    {services.length > 6 && (
-                      <Link
-                        href="/services"
-                        className="block py-1 text-xs font-semibold text-gold-600"
-                      >
-                        + {services.length - 6} more services
-                      </Link>
+                      {services.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setMobileServicesOpen((prev) => !prev)}
+                          aria-label="Toggle services submenu"
+                          className={cn(
+                            'px-3 py-2.5 rounded-r-lg transition flex items-center',
+                            isActive
+                              ? 'bg-navy-50 text-navy-900'
+                              : 'text-navy-900/60 hover:bg-slate-50 hover:text-navy-900'
+                          )}
+                        >
+                          <ChevronDown
+                            className={cn(
+                              'w-4 h-4 transition-transform duration-200',
+                              mobileServicesOpen ? 'rotate-180' : ''
+                            )}
+                          />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Collapsible services sub-list */}
+                    {mobileServicesOpen && services.length > 0 && (
+                      <div className="pl-4 pr-2 py-1.5 mt-1 space-y-0.5 bg-slate-50 rounded-xl border border-slate-100">
+                        {services.map((service) => (
+                          <Link
+                            key={service.id}
+                            href={`/services/${service.slug}`}
+                            className="flex items-center gap-2 py-2 px-2 text-xs font-medium text-navy-900/80 hover:text-gold-600 rounded-lg hover:bg-white transition"
+                          >
+                            <span className="w-1 h-1 rounded-full bg-gold-500 shrink-0" />
+                            {service.name}
+                          </Link>
+                        ))}
+                        <Link
+                          href="/services"
+                          className="flex items-center gap-1.5 px-2 py-2 text-xs font-bold text-gold-600 hover:text-gold-700 transition"
+                        >
+                          <span>View All Services</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
                     )}
                   </div>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      'block px-3 py-2.5 rounded-lg text-base font-semibold transition',
+                      isActive
+                        ? 'bg-navy-50 text-navy-900 font-bold border-l-4 border-gold-500'
+                        : 'text-navy-900/80 hover:bg-slate-50 hover:text-navy-900'
+                    )}
+                  >
+                    {link.label}
+                  </Link>
                 )}
               </div>
             );
