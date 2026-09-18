@@ -376,41 +376,41 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                   `Engineered ${service.name.toLowerCase()} solutions executed by licensed specialists across commercial, residential, and industrial facilities in the UAE.`}
               </p>
 
-              {/* 3 Key Alveric Feature Highlights */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-5 h-5" />
+              {/* 3 Key Alveric Feature Highlights — 2 col on mobile, 3 on sm+ */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-2">
+                <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">
-                      UAE Municipality Compliant
+                  <div className="min-w-0">
+                    <h4 className="text-[11px] sm:text-xs font-bold text-white leading-tight">
+                      UAE Compliant
                     </h4>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Strict safety codes</span>
+                    <span className="text-[9.5px] sm:text-[10px] text-slate-400 block mt-0.5">Safety codes</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
-                    <Award className="w-5 h-5" />
+                <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Award className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">
+                  <div className="min-w-0">
+                    <h4 className="text-[11px] sm:text-xs font-bold text-white leading-tight">
                       Licensed Engineers
                     </h4>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Certified technicians</span>
+                    <span className="text-[9.5px] sm:text-[10px] text-slate-400 block mt-0.5">Certified team</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
-                  <div className="w-9 h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
-                    <Clock className="w-5 h-5" />
+                <div className="col-span-2 sm:col-span-1 flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white leading-tight">
+                  <div className="min-w-0">
+                    <h4 className="text-[11px] sm:text-xs font-bold text-white leading-tight">
                       On-Time Delivery
                     </h4>
-                    <span className="text-[10px] text-slate-400 block mt-0.5">Strict milestone schedule</span>
+                    <span className="text-[9.5px] sm:text-[10px] text-slate-400 block mt-0.5">Milestone schedule</span>
                   </div>
                 </div>
               </div>
@@ -472,19 +472,19 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                   </div>
                 )}
 
-                {/* Subtle vignette over image */}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-transparent to-transparent pointer-events-none" />
+                {/* Very light vignette — only bottom third for badge readability, keeps image clear */}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-950/65 via-transparent to-transparent pointer-events-none" />
 
                 {/* Floating Bottom Badge Card */}
-                <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center gap-3 p-3 sm:p-3.5 rounded-xl bg-navy-950/90 backdrop-blur-md shadow-xl border border-white/15">
-                  <div className="w-10 h-10 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-gold-400" />
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-10 flex items-center gap-2.5 sm:gap-3 p-2.5 sm:p-3.5 rounded-xl bg-navy-950/85 backdrop-blur-md shadow-xl border border-white/15">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center shrink-0">
+                    <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-gold-400" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs font-black text-white leading-tight truncate">
+                    <h4 className="text-[11px] sm:text-xs font-black text-white leading-tight truncate">
                       Engineered Quality &amp; Precision
                     </h4>
-                    <p className="text-[10px] text-slate-300 leading-tight mt-0.5 truncate">
+                    <p className="text-[9.5px] sm:text-[10px] text-slate-300 leading-tight mt-0.5 truncate">
                       Alveric Technical Contracting LLC
                     </p>
                   </div>
@@ -652,32 +652,52 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 </p>
               </div>
 
-              {/* Vertical Process Timeline */}
-              <div className="relative pt-3 space-y-5">
-                {/* Connecting Vertical Line */}
-                <div className="absolute left-[19px] top-6 bottom-6 w-0.5 bg-slate-200 border-l border-dashed border-slate-300 -z-0" />
+              {/* Process Steps — 2-col grid on mobile, vertical list on lg */}
+              <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 lg:gap-0 lg:relative lg:pt-3 lg:space-y-5">
+                {/* Connecting Vertical Line — desktop only */}
+                <div className="hidden lg:block absolute left-[19px] top-6 bottom-6 w-0.5 bg-slate-200 border-l border-dashed border-slate-300 -z-0" />
 
                 {processSteps.map((step, idx) => {
                   const StepIcon = step.icon;
+                  const isLastOdd = processSteps.length % 2 !== 0 && idx === processSteps.length - 1;
                   return (
-                    <div key={idx} className="relative z-10 flex items-start gap-4 sm:gap-5 group">
-                      {/* Step Number Dot */}
-                      <div className="w-10 h-10 rounded-xl bg-navy-950 text-gold-400 font-black text-xs flex items-center justify-center shrink-0 shadow-md border-2 border-white group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
-                        {step.stepNumber}
+                    <div
+                      key={idx}
+                      className={`relative z-10 group ${
+                        isLastOdd ? 'col-span-2' : ''
+                      } lg:flex lg:items-start lg:gap-4 sm:gap-5`}
+                    >
+                      {/* Mobile card layout */}
+                      <div className="lg:hidden flex flex-col h-full p-3 sm:p-4 rounded-xl bg-white border border-slate-200/90 shadow-sm group-hover:border-gold-500/40 transition">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="w-7 h-7 rounded-lg bg-navy-950 text-gold-400 font-black text-[10px] flex items-center justify-center shrink-0">
+                            {step.stepNumber}
+                          </div>
+                          <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
+                            <StepIcon className="w-3.5 h-3.5 text-gold-600" />
+                          </div>
+                        </div>
+                        <h3 className="text-[11px] sm:text-xs font-extrabold text-navy-900 mb-1 leading-snug">
+                          {step.title}
+                        </h3>
+                        <p className="text-[10px] sm:text-[11px] text-slate-500 leading-relaxed">
+                          {step.description}
+                        </p>
                       </div>
 
-                      {/* Step Content Card */}
-                      <div className="flex-1 flex items-start gap-3.5 p-4 sm:p-5 rounded-xl bg-white border border-slate-200/90 shadow-2xs group-hover:border-gold-500/40 group-hover:shadow-sm transition">
-                        <div className="w-9 h-9 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center shrink-0">
-                          <StepIcon className="w-4 h-4 text-gold-600" />
+                      {/* Desktop timeline layout */}
+                      <div className="hidden lg:flex items-start gap-4 sm:gap-5">
+                        <div className="w-10 h-10 rounded-xl bg-navy-950 text-gold-400 font-black text-xs flex items-center justify-center shrink-0 shadow-md border-2 border-white group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
+                          {step.stepNumber}
                         </div>
-                        <div className="space-y-1">
-                          <h3 className="text-sm font-extrabold text-navy-900">
-                            {step.title}
-                          </h3>
-                          <p className="text-xs text-slate-500 leading-relaxed">
-                            {step.description}
-                          </p>
+                        <div className="flex-1 flex items-start gap-3.5 p-4 sm:p-5 rounded-xl bg-white border border-slate-200/90 shadow-2xs group-hover:border-gold-500/40 group-hover:shadow-sm transition">
+                          <div className="w-9 h-9 rounded-lg bg-slate-100 text-navy-900 flex items-center justify-center shrink-0">
+                            <StepIcon className="w-4 h-4 text-gold-600" />
+                          </div>
+                          <div className="space-y-1">
+                            <h3 className="text-sm font-extrabold text-navy-900">{step.title}</h3>
+                            <p className="text-xs text-slate-500 leading-relaxed">{step.description}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -716,55 +736,56 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Why Choose Us — 2-col on mobile, 4-col on desktop */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
             {/* Card 1 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
-                <Shield className="w-6 h-6 text-gold-400" />
+            <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-sm shrink-0">
+                <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+              <h3 className="text-[11px] sm:text-sm font-extrabold text-navy-900 mb-1 sm:mb-1.5 leading-snug">
                 UAE Regulatory Compliance
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-[10px] sm:text-xs text-slate-500 leading-relaxed">
                 All contracting adheres strictly to regional civil defence, municipal, and health &amp; safety standards.
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
-                <Users className="w-6 h-6 text-gold-400" />
+            <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-sm shrink-0">
+                <Users className="w-5 h-5 sm:w-6 sm:h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+              <h3 className="text-[11px] sm:text-sm font-extrabold text-navy-900 mb-1 sm:mb-1.5 leading-snug">
                 Certified Engineering Staff
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-[10px] sm:text-xs text-slate-500 leading-relaxed">
                 Multi-disciplinary technicians with verified technical credentials and continuous safety training.
               </p>
             </div>
 
             {/* Card 3 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
-                <CheckCircle2 className="w-6 h-6 text-gold-400" />
+            <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-sm shrink-0">
+                <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+              <h3 className="text-[11px] sm:text-sm font-extrabold text-navy-900 mb-1 sm:mb-1.5 leading-snug">
                 Quality Materials Only
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-[10px] sm:text-xs text-slate-500 leading-relaxed">
                 100% genuine components and durable parts procured exclusively from certified manufacturers.
               </p>
             </div>
 
             {/* Card 4 */}
-            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-4 shadow-sm">
-                <Clock className="w-6 h-6 text-gold-400" />
+            <div className="p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl bg-white border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-0.5 transition duration-200 flex flex-col items-center text-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-navy-950 text-white flex items-center justify-center mb-3 sm:mb-4 shadow-sm shrink-0">
+                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-gold-400" />
               </div>
-              <h3 className="text-sm font-extrabold text-navy-900 mb-1.5">
+              <h3 className="text-[11px] sm:text-sm font-extrabold text-navy-900 mb-1 sm:mb-1.5 leading-snug">
                 Strict On-Time Delivery
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-[10px] sm:text-xs text-slate-500 leading-relaxed">
                 Disciplined project scheduling ensures milestones are achieved without costly project delays.
               </p>
             </div>
@@ -855,15 +876,15 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {relatedServices.map((other) => (
                 <Link
                   key={other.id}
                   href={`/services/${other.slug}`}
                   className="group flex flex-col bg-white rounded-xl overflow-hidden border border-slate-200 shadow-2xs hover:shadow-md hover:border-gold-500/40 hover:-translate-y-1 transition-all duration-300"
                 >
-                  {/* Top Image */}
-                  <div className="relative h-32 w-full bg-slate-100 overflow-hidden">
+                  {/* Top Image — brighter, no heavy overlay */}
+                  <div className="relative h-28 sm:h-32 w-full bg-slate-100 overflow-hidden">
                     <CldImageWrapper
                       src={other.featured_image?.secure_url}
                       alt={other.name}
@@ -871,16 +892,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                       fallbackText={other.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
+                    {/* Very light bottom gradient only for legibility — keeps image clear */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/30 to-transparent pointer-events-none" />
                   </div>
 
                   {/* Card Title & Arrow */}
-                  <div className="p-3.5 flex flex-col flex-1 justify-between">
-                    <h3 className="text-xs font-black text-navy-900 group-hover:text-gold-600 transition-colors leading-snug line-clamp-2 mb-2">
+                  <div className="p-2.5 sm:p-3.5 flex flex-col flex-1 justify-between">
+                    <h3 className="text-[11px] sm:text-xs font-black text-navy-900 group-hover:text-gold-600 transition-colors leading-snug line-clamp-2 mb-1.5 sm:mb-2">
                       {other.name}
                     </h3>
-                    <div className="flex items-center text-gold-500 text-xs font-bold pt-1">
-                      <span className="text-[11px] group-hover:underline">Explore</span>
-                      <ArrowRight className="w-3.5 h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
+                    <div className="flex items-center text-gold-500 font-bold pt-1">
+                      <span className="text-[10px] sm:text-[11px] group-hover:underline">Explore</span>
+                      <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </Link>
