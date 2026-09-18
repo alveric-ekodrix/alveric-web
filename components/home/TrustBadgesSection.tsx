@@ -23,31 +23,31 @@ const trustBadges: TrustBadgeItem[] = [
     icon: ShieldCheck,
     title: 'Licensed & Registered',
     subtitle: 'Compliant with UAE Municipality & Civil Defense technical standards',
-    badge: 'Official Approval',
+    badge: 'UAE Approved',
   },
   {
     icon: Award,
     title: 'ISO Quality Standards',
     subtitle: 'ISO 9001 certified execution, premium grade materials & inspection',
-    badge: 'ISO Certified',
+    badge: 'ISO 9001',
   },
   {
     icon: HardHat,
     title: 'HSE & Safety First',
     subtitle: 'Zero-harm incident policy with certified site supervisors & engineers',
-    badge: '100% HSE Compliant',
+    badge: 'HSE Compliant',
   },
   {
     icon: Clock,
     title: 'On-Time Project Delivery',
-    subtitle: 'Strict milestone tracking and prompt handover on every commercial scope',
-    badge: 'Milestone Guaranteed',
+    subtitle: 'Strict milestone tracking and prompt handover on every scope',
+    badge: 'Guaranteed',
   },
   {
     icon: CheckCircle2,
     title: 'Turnkey MEP & Contracting',
     subtitle: 'End-to-end electrical, mechanical, civil, and specialized fit-out',
-    badge: 'Full-Scope',
+    badge: 'Full Scope',
   },
 ];
 
@@ -135,16 +135,16 @@ function TrustCard({
   return (
     <div
       className={cn(
-        'group relative bg-navy-900/90 hover:bg-navy-900 border border-navy-800 hover:border-gold-500/50 rounded-2xl p-3.5 sm:p-4 min-[900px]:p-3 lg:p-3.5 xl:p-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-gold-500/10 flex flex-col justify-between h-full w-full',
+        'group relative bg-navy-900/90 hover:bg-navy-900 border border-navy-800 hover:border-gold-500/50 rounded-2xl p-3 sm:p-4 min-[900px]:p-3 lg:p-3.5 xl:p-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-gold-500/10 flex flex-col justify-between h-full w-full overflow-hidden',
         isLastOnMobile ? 'sm:p-5' : ''
       )}
     >
       <div>
-        <div className="flex items-center justify-between gap-1.5 mb-2.5 sm:mb-3">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 min-[900px]:w-8 min-[900px]:h-8 xl:w-9 xl:h-9 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-navy-950 transition-all duration-300 shrink-0 shadow-inner">
-            <Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5 min-[900px]:w-4 min-[900px]:h-4 transition-transform duration-300 group-hover:scale-110" />
+        <div className="flex items-center justify-between gap-1 mb-2 sm:mb-3">
+          <div className="w-7 h-7 sm:w-9 sm:h-9 min-[900px]:w-7.5 min-[900px]:h-7.5 lg:w-8 lg:h-8 xl:w-9 xl:h-9 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400 group-hover:bg-gold-500 group-hover:text-navy-950 transition-all duration-300 shrink-0 shadow-inner">
+            <Icon className="w-3.5 h-3.5 sm:w-4.5 sm:h-4.5 min-[900px]:w-3.5 min-[900px]:h-3.5 lg:w-4 lg:h-4 transition-transform duration-300 group-hover:scale-110" />
           </div>
-          <span className="text-[9px] sm:text-[10px] min-[900px]:text-[8.5px] lg:text-[9px] xl:text-[10px] font-bold px-2 py-0.5 rounded-full bg-navy-800/90 text-gold-300 border border-navy-700/80 whitespace-nowrap shrink-0">
+          <span className="text-[8px] sm:text-[9.5px] min-[900px]:text-[8.5px] lg:text-[9px] xl:text-[10px] font-bold px-2 py-0.5 rounded-full bg-navy-800/90 text-gold-300 border border-navy-700/80 whitespace-nowrap shrink-0">
             {badge.badge}
           </span>
         </div>
@@ -154,7 +154,7 @@ function TrustCard({
         </h3>
         <p
           className={cn(
-            'mt-1.5 sm:mt-2 text-[10.5px] sm:text-xs min-[900px]:text-[10.5px] lg:text-[11px] xl:text-xs text-slate-300/85 leading-snug font-normal',
+            'mt-1 sm:mt-2 text-[10px] sm:text-xs min-[900px]:text-[10.5px] lg:text-[11px] xl:text-xs text-slate-300/85 leading-snug font-normal',
             isLastOnMobile ? 'max-w-xl' : ''
           )}
         >
@@ -162,7 +162,7 @@ function TrustCard({
         </p>
       </div>
 
-      <div className="mt-3 sm:mt-4 pt-2 sm:pt-2.5 border-t border-navy-800/90 flex items-center gap-1 sm:gap-1.5 text-[9.5px] sm:text-[10.5px] min-[900px]:text-[9px] lg:text-[9.5px] font-semibold text-gold-400">
+      <div className="mt-2.5 sm:mt-4 pt-2 sm:pt-2.5 border-t border-navy-800/90 flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-[10.5px] min-[900px]:text-[9px] lg:text-[9.5px] font-semibold text-gold-400 shrink-0">
         <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-500 shrink-0" />
         <span>Verified Standard</span>
       </div>
