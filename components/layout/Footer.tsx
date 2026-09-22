@@ -16,8 +16,6 @@ import {
   ArrowRight,
   ChevronDown,
   MessageCircle,
-  Sparkles,
-  ArrowUp,
 } from 'lucide-react';
 
 interface FooterProps {
@@ -87,15 +85,15 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
               size="md"
               showTagline={false}
             />
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gold-500/10 border border-gold-500/25 text-[10px] font-extrabold text-gold-400 tracking-wider uppercase">
-              <Sparkles className="w-3 h-3 text-gold-400" />
+            <div className="inline-flex items-center px-2.5 py-1 rounded-md bg-gold-500/10 border border-gold-500/25 text-[10px] font-extrabold text-gold-400 tracking-wider uppercase">
               <span>{companySettings?.tagline || 'BUILDING SOLUTIONS. DELIVERING EXCELLENCE.'}</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed font-normal">
               We provide precision technical contracting services across commercial, residential, and industrial environments with an uncompromising focus on quality, safety, and reliability.
             </p>
 
-            {/* Social Media Links */}
+            {/* Social Media Links — Hidden per request */}
+            {/* 
             <div className="pt-2">
               <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2">Connect With Us</span>
               <div className="flex items-center gap-2.5">
@@ -143,7 +141,6 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
                     <Youtube className="w-4 h-4" />
                   </a>
                 )}
-                {/* Always include direct WhatsApp in social row */}
                 <a
                   href={WA_FOOTER_URL}
                   target="_blank"
@@ -156,6 +153,7 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
                 </a>
               </div>
             </div>
+            */}
           </div>
 
           {/* Column 2: Quick Links */}
@@ -351,16 +349,6 @@ export function Footer({ companySettings, services = [] }: FooterProps) {
                 ekodrix
               </a>
             </p>
-
-            {/* Back to top button */}
-            <button
-              onClick={scrollToTop}
-              className="w-8 h-8 rounded-lg bg-navy-900 border border-navy-800 hover:border-gold-500/50 flex items-center justify-center text-slate-400 hover:text-gold-400 transition shadow-sm"
-              aria-label="Scroll to top"
-              title="Back to top"
-            >
-              <ArrowUp className="w-4 h-4" />
-            </button>
           </div>
         </div>
       </div>

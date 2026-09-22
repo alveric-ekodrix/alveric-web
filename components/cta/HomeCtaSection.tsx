@@ -1,7 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { HomepageSettings } from '@/types/database';
-import { ArrowRight } from 'lucide-react';
 
 interface HomeCtaSectionProps {
   settings?: HomepageSettings | null;
@@ -37,7 +38,10 @@ export function HomeCtaSection({ settings }: HomeCtaSectionProps) {
               className="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-gold-500 text-navy-950 font-black text-sm tracking-wide shadow-lg hover:bg-gold-400 transition-all duration-200 shrink-0 group"
             >
               <span>{buttonText}</span>
-              <ArrowRight className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform stroke-[2.5]" />
+              <svg className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </Link>
           </div>
         </div>
