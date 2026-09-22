@@ -42,7 +42,9 @@ export default async function AboutPage() {
     aboutSettings?.vision?.trim() ||
     'To be a regional leader in technical contracting, recognized for quality, integrity, and a commitment to building a better tomorrow.';
 
-  const cleanWhatsapp = (companySettings?.whatsapp_number || companySettings?.phone_primary)?.replace(/\D/g, '');
+  const cleanWhatsapp =
+    (companySettings?.whatsapp_number || companySettings?.phone_primary)?.replace(/\D/g, '') ||
+    '971569919792';
   const whatsappUrl = cleanWhatsapp
     ? `https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
         'Hello Alveric Team, I would like to learn more about your contracting services.'
@@ -88,6 +90,7 @@ export default async function AboutPage() {
   const bannerImageUrl =
     aboutSettings?.banner_image?.secure_url ||
     'https://images.unsplash.com/photo-1541888946425-d0fbb186156a?auto=format&fit=crop&w=1920&q=80';
+  const bannerMobileImageUrl = aboutSettings?.banner_mobile_image?.secure_url || null;
 
   return (
     <div className="w-full bg-white text-slate-800">
@@ -96,6 +99,7 @@ export default async function AboutPage() {
         heading={heading}
         description={description}
         bannerImageUrl={bannerImageUrl}
+        bannerMobileImageUrl={bannerMobileImageUrl}
         calculatedYears={calculatedYears}
         eyebrow={aboutSettings?.hero_eyebrow}
         feature1Title={aboutSettings?.hero_feature_1_title}

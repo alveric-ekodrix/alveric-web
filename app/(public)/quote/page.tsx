@@ -1,7 +1,7 @@
 import React from 'react';
 import { getPublishedServices, getPublishedCategories, getCompanySettings } from '@/lib/data/public';
 import { QuoteRequestForm } from '@/components/forms/QuoteRequestForm';
-import { ShieldCheck, Clock, FileText, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Clock, FileText } from 'lucide-react';
 
 export const revalidate = 60;
 
@@ -20,18 +20,37 @@ export default async function QuotePage({ searchParams }: QuotePageProps) {
 
   return (
     <div className="w-full">
-      {/* Header Banner */}
-      <section className="bg-navy-950 text-white py-16 lg:py-20 border-b border-navy-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-3">
-            <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-gold-400">
-              COMMERCIAL & TECHNICAL PROPOSALS
-            </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-              Request a Free Technical Quote
+      {/* ── Hero Banner ── */}
+      <section className="relative overflow-hidden bg-navy-950 text-white py-20 lg:py-28">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full border border-white/5" />
+          <div className="absolute -top-12 -right-12 w-64 h-64 rounded-full border border-white/5" />
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage:
+                'repeating-linear-gradient(45deg, #fff 0px, #fff 1px, transparent 1px, transparent 40px)',
+            }}
+          />
+        </div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-500/30 bg-gold-500/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse" />
+              <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-gold-400">
+                Commercial &amp; Technical Proposals
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-white">
+              Request a Free{' '}
+              <span className="text-gold-400">Technical Quote</span>
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Submit your engineering scope or maintenance project details. Our estimation engineers will analyze your specifications and provide a competitive, transparent proposal.
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+              Submit your engineering scope or maintenance project details. Our estimation
+              engineers will analyze your specifications and provide a competitive, transparent proposal.
             </p>
           </div>
         </div>
