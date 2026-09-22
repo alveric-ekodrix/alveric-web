@@ -114,25 +114,25 @@ export function AboutHeroSection({
             </p>
           )}
 
-          {/* Quick Trust Highlights (Mobile Stack, Tablet/Desktop 3-Cols) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-0.5 max-w-3xl">
-            <div className="flex items-center gap-2 p-2 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[11px] sm:text-xs text-slate-100 shadow-sm">
+          {/* Quick Trust Highlights (Mobile 3-Cols, Tablet/Desktop 3-Cols) */}
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 pt-0.5 max-w-3xl">
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-1 sm:gap-2 p-1.5 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[10px] sm:text-xs text-slate-100 shadow-sm">
               <div className="w-5 h-5 rounded-md bg-gold-500/15 border border-gold-500/30 flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-3 h-3 text-gold-400" />
               </div>
-              <span className="font-bold">{feature1Title || 'Licensed Contractor'}</span>
+              <span className="font-bold leading-tight">{feature1Title || 'Licensed Contractor'}</span>
             </div>
-            <div className="flex items-center gap-2 p-2 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[11px] sm:text-xs text-slate-100 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-1 sm:gap-2 p-1.5 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[10px] sm:text-xs text-slate-100 shadow-sm">
               <div className="w-5 h-5 rounded-md bg-gold-500/15 border border-gold-500/30 flex items-center justify-center shrink-0">
                 <Wrench className="w-3 h-3 text-gold-400" />
               </div>
-              <span className="font-bold">{feature2Title || 'Full-Scope MEP & Civil'}</span>
+              <span className="font-bold leading-tight">{feature2Title || 'Full-Scope MEP & Civil'}</span>
             </div>
-            <div className="flex items-center gap-2 p-2 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[11px] sm:text-xs text-slate-100 shadow-sm">
+            <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-1 sm:gap-2 p-1.5 sm:py-2 sm:px-2.5 rounded-lg bg-navy-900/85 backdrop-blur-md border border-navy-700/70 text-[10px] sm:text-xs text-slate-100 shadow-sm">
               <div className="w-5 h-5 rounded-md bg-gold-500/15 border border-gold-500/30 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-3 h-3 text-gold-400" />
               </div>
-              <span className="font-bold">{feature3Title || 'ISO Quality Standards'}</span>
+              <span className="font-bold leading-tight">{feature3Title || 'ISO Quality Standards'}</span>
             </div>
           </div>
 

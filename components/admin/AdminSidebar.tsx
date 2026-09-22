@@ -87,7 +87,7 @@ export function AdminSidebar() {
       {/* Sidebar Container */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-navy-950 text-white flex flex-col border-r border-navy-800 transition-transform duration-200 lg:translate-x-0 lg:static',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-navy-950 text-white flex flex-col border-r border-navy-800 transition-transform duration-200 lg:translate-x-0 lg:static lg:h-full',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
