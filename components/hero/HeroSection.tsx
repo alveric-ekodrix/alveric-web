@@ -20,18 +20,32 @@ export function HeroSection({ settings }: HeroSectionProps) {
   const defaultHeroImage =
     'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?q=80&w=2070&auto=format&fit=crop';
   const heroImageUrl = settings?.hero_image?.secure_url || defaultHeroImage;
+  const heroMobileImageUrl = settings?.hero_mobile_image?.secure_url || null;
 
   return (
     <section className="relative w-full min-h-[500px] lg:min-h-[560px] xl:min-h-[620px] lg:max-h-[720px] flex items-center overflow-hidden bg-navy-950 text-white">
-      {/* 1. FULL-WIDTH BACKGROUND IMAGE */}
+      {/* 1. FULL-WIDTH BACKGROUND IMAGE (DESKTOP + OPTIONAL MOBILE VIEW BANNER) */}
       <div className="absolute inset-0 z-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={heroImageUrl}
-          alt="Alveric Technical Contracting Hero"
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-        />
+        {heroMobileImageUrl ? (
+          <picture>
+            <source media="(max-width: 767px)" srcSet={heroMobileImageUrl} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={heroImageUrl}
+              alt="Alveric Technical Contracting Hero"
+              className="w-full h-full object-cover object-center"
+              loading="eager"
+            />
+          </picture>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={heroImageUrl}
+            alt="Alveric Technical Contracting Hero"
+            className="w-full h-full object-cover object-center"
+            loading="eager"
+          />
+        )}
 
         {/* 2. CINEMATIC GRADIENT OVERLAYS FOR OPTIMAL READABILITY */}
         {/* Horizontal vignette: darker on text side, opens up for photo on right */}
