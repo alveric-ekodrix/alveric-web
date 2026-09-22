@@ -72,18 +72,18 @@ export function AboutStorySection({
               <div className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-slate-400 mb-3 block">
                 CORE COMMITMENTS &amp; STANDARDS
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-3.5">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
                 {benefits && benefits.length > 0
                   ? benefits.map((b, idx) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-gold-500/50 hover:-translate-y-0.5 transition-all duration-200 group"
+                        className="flex flex-col sm:flex-row items-start gap-2 sm:gap-3 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-gold-500/50 hover:-translate-y-0.5 transition-all duration-200 group"
                       >
-                        <div className="w-7 h-7 rounded-xl bg-gold-500/15 border border-gold-500/30 text-gold-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
-                          <CheckCircle2 className="w-4 h-4" />
+                        <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 text-gold-600 flex items-center justify-center shrink-0 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
+                          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h4 className="text-xs sm:text-sm font-bold text-navy-900 group-hover:text-navy-950 leading-snug">
+                          <h4 className="text-[11px] sm:text-sm font-bold text-navy-900 group-hover:text-navy-950 leading-snug">
                             {b}
                           </h4>
                         </div>
@@ -92,16 +92,16 @@ export function AboutStorySection({
                   : defaultCommitments.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-gold-500/50 hover:-translate-y-0.5 transition-all duration-200 group"
+                        className="flex flex-col sm:flex-row items-start gap-2 sm:gap-3 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-gold-500/50 hover:-translate-y-0.5 transition-all duration-200 group"
                       >
-                        <div className="w-8 h-8 rounded-xl bg-gold-500/15 border border-gold-500/30 text-gold-600 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
-                          <CheckCircle2 className="w-4 h-4" />
+                        <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-gold-500/15 border border-gold-500/30 text-gold-600 flex items-center justify-center shrink-0 group-hover:bg-gold-500 group-hover:text-navy-950 transition-colors">
+                          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h4 className="text-xs sm:text-sm font-bold text-navy-900 group-hover:text-gold-600 transition-colors leading-snug">
+                          <h4 className="text-[11px] sm:text-sm font-bold text-navy-900 group-hover:text-gold-600 transition-colors leading-snug">
                             {item.title}
                           </h4>
-                          <p className="text-[11px] sm:text-xs text-slate-500 mt-1 leading-relaxed">
+                          <p className="text-[10px] sm:text-xs text-slate-500 mt-0.5 sm:mt-1 leading-tight sm:leading-relaxed">
                             {item.desc}
                           </p>
                         </div>
