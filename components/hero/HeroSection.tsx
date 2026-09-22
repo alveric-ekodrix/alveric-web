@@ -1,7 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { HomepageSettings } from '@/types/database';
-import { ArrowRight, Star } from 'lucide-react';
 
 interface HeroSectionProps {
   settings?: HomepageSettings | null;
@@ -91,7 +92,10 @@ export function HeroSection({ settings }: HeroSectionProps) {
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-navy-950 font-black text-xs sm:text-sm tracking-wide shadow-lg shadow-gold-500/20 hover:scale-[1.02] transition-all duration-200 group"
             >
               <span>{primaryText}</span>
-              <ArrowRight className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform" />
+              <svg className="w-4 h-4 text-navy-950 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </Link>
 
             <Link
@@ -99,7 +103,10 @@ export function HeroSection({ settings }: HeroSectionProps) {
               className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/25 text-white font-bold text-xs sm:text-sm tracking-wide shadow-md backdrop-blur-md hover:scale-[1.02] transition-all duration-200 group"
             >
               <span>{secondaryText}</span>
-              <ArrowRight className="w-4 h-4 text-white/70 group-hover:translate-x-1 transition-transform" />
+              <svg className="w-4 h-4 text-white/70 group-hover:translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </Link>
           </div>
 
@@ -119,7 +126,9 @@ export function HeroSection({ settings }: HeroSectionProps) {
 
             <div className="flex items-center gap-2">
               <div className="flex items-center px-2 py-0.5 rounded-md bg-gold-500 text-navy-950 text-[11px] font-black shadow-xs">
-                <Star className="w-3 h-3 fill-current mr-1" />
+                <svg className="w-3 h-3 fill-current mr-1 text-navy-950" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
                 <span>4.9 / 5.0</span>
               </div>
               <span className="text-[11px] sm:text-xs font-semibold text-slate-200">
