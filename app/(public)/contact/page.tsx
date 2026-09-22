@@ -104,34 +104,38 @@ export default async function ContactPage() {
       </section>
 
       {/* ── Contact Info Cards Row ── */}
-      <section className="py-10 bg-white border-b border-slate-200">
+      <section className="py-8 sm:py-10 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2.5 sm:gap-4">
             {contactCards.map((card, i) => {
               const isGreen = card.color === 'green';
+              const isOddLast = contactCards.length % 2 === 1 && i === contactCards.length - 1;
+              const wrapperClass = isOddLast ? 'col-span-2 xl:col-span-1' : '';
+
               const content = (
                 <div
-                  key={i}
-                  className={`group flex flex-col gap-3 p-5 rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg ${
+                  className={`h-full group flex flex-col gap-2 sm:gap-3 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg ${
                     isGreen
                       ? 'bg-[#f0fdf4] border-[#bbf7d0] hover:border-[#25D366]/50'
                       : 'bg-white border-slate-200 hover:border-gold-300 hover:bg-gold-50/30'
                   }`}
                 >
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-xl shrink-0 ${
+                  <div className={`flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl shrink-0 ${
                     isGreen ? 'bg-[#dcfce7]' : 'bg-gold-50 border border-gold-100'
                   }`}>
-                    <card.icon className={`w-5 h-5 ${isGreen ? 'text-[#16a34a]' : 'text-gold-500'}`} strokeWidth={2} />
+                    <card.icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isGreen ? 'text-[#16a34a]' : 'text-gold-500'}`} strokeWidth={2} />
                   </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">
-                      {card.label}
-                    </p>
-                    <p className={`text-sm font-bold leading-snug ${isGreen ? 'text-[#15803d]' : 'text-navy-900'}`}>
-                      {card.value}
-                    </p>
+                  <div className="min-w-0 flex-1 flex flex-col justify-between">
+                    <div>
+                      <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">
+                        {card.label}
+                      </p>
+                      <p className={`text-xs sm:text-sm font-bold leading-snug break-words ${isGreen ? 'text-[#15803d]' : 'text-navy-900'}`}>
+                        {card.value}
+                      </p>
+                    </div>
                     {card.href && (
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-bold mt-1.5 ${
+                      <span className={`inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold mt-1 sm:mt-1.5 ${
                         isGreen ? 'text-[#16a34a]' : 'text-gold-600'
                       }`}>
                         {isGreen ? 'Chat Now' : 'Click to contact'}
@@ -149,21 +153,22 @@ export default async function ContactPage() {
                     href={card.href}
                     target={(card as any).external ? '_blank' : undefined}
                     rel={(card as any).external ? 'noopener noreferrer' : undefined}
+                    className={`block ${wrapperClass}`}
                   >
                     {content}
                   </a>
                 );
               }
-              return <div key={i}>{content}</div>;
+              return <div key={i} className={wrapperClass}>{content}</div>;
             })}
           </div>
         </div>
       </section>
 
       {/* ── Main Content: Info + Form ── */}
-      <section className="py-14 lg:py-20 bg-slate-50">
+      <section className="py-10 sm:py-14 lg:py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
 
             {/* Left: Company info panel */}
             <div className="lg:col-span-5 space-y-6">
@@ -211,9 +216,9 @@ export default async function ContactPage() {
                 <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
                   <h2 className="text-xs font-black text-navy-900 uppercase tracking-wider">Company Information</h2>
                 </div>
-                <div className="p-6 space-y-4">
+                <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3.5 sm:gap-4">
                   {address && (
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-50 border border-gold-100 shrink-0 mt-0.5">
                         <MapPin className="w-4 h-4 text-gold-500" />
                       </div>
@@ -224,7 +229,7 @@ export default async function ContactPage() {
                     </div>
                   )}
                   {(phone1 || phone2) && (
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-50 border border-gold-100 shrink-0 mt-0.5">
                         <Phone className="w-4 h-4 text-gold-500" />
                       </div>
@@ -236,7 +241,7 @@ export default async function ContactPage() {
                     </div>
                   )}
                   {email && (
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-50 border border-gold-100 shrink-0 mt-0.5">
                         <Mail className="w-4 h-4 text-gold-500" />
                       </div>
@@ -247,7 +252,7 @@ export default async function ContactPage() {
                     </div>
                   )}
                   {hours && (
-                    <div className="flex items-start gap-3.5">
+                    <div className="flex items-start gap-3">
                       <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gold-50 border border-gold-100 shrink-0 mt-0.5">
                         <Clock className="w-4 h-4 text-gold-500" />
                       </div>
