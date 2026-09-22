@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client';
 import { HomepageSettings, Media } from '@/types/database';
 import { ImageUploadZone } from '@/components/media/ImageUploadZone';
 import { useAdminToast } from '@/components/admin/AdminToastProvider';
-import { Save, AlertCircle, Loader2 } from 'lucide-react';
+import { Save, AlertCircle, Loader2, Smartphone, Monitor } from 'lucide-react';
 
 export default function HomepageAdminPage() {
   const [settings, setSettings] = useState<HomepageSettings | null>(null);
@@ -19,6 +19,7 @@ export default function HomepageAdminPage() {
   const [secondaryCtaText, setSecondaryCtaText] = useState('Get a Quote');
   const [secondaryCtaUrl, setSecondaryCtaUrl] = useState('/quote');
   const [heroImage, setHeroImage] = useState<Media | null>(null);
+  const [heroMobileImage, setHeroMobileImage] = useState<Media | null>(null);
 
   // CTA Section Fields
   const [ctaHeading, setCtaHeading] = useState("Let's Build Your Next Project Together");
@@ -63,6 +64,31 @@ export default function HomepageAdminPage() {
         if (homeData.cta_button_text) setCtaButtonText(homeData.cta_button_text);
         if (homeData.cta_button_url) setCtaButtonUrl(homeData.cta_button_url);
         if (homeData.hero_image) setHeroImage(homeData.hero_image);
+
+        if ((homeData as any).hero_mobile_image_id) {
+          const { data: mMed } = await supabase
+            .from('media')
+            .select('*')
+            .eq('id', (homeData as any).hero_mobile_image_id)
+            .maybeSingle();
+          if (mMed) setHeroMobileImage(mMed);
+        }
+      }
+
+      // Load fallback mobile banner from site_statistics
+      const { data: mobileStat } = await supabase
+        .from('site_statistics')
+        .select('*')
+        .eq('section', 'home_hero_media')
+        .eq('label', 'hero_mobile_image')
+        .maybeSingle();
+
+      if (mobileStat?.suffix) {
+        setHeroMobileImage({
+          id: mobileStat.value || mobileStat.id,
+          secure_url: mobileStat.suffix,
+          alt_text: 'Homepage Hero Mobile Banner',
+        } as any);
       }
     } catch (err) {
       console.error('Failed to load homepage CMS data:', err);
@@ -83,6 +109,7 @@ export default function HomepageAdminPage() {
         hero_heading: heroHeading.trim(),
         hero_description: heroDescription.trim(),
         hero_image_id: heroImage?.id || null,
+        hero_mobile_image_id: heroMobileImage?.id || null,
         primary_cta_text: primaryCtaText.trim(),
         primary_cta_url: primaryCtaUrl.trim(),
         secondary_cta_text: secondaryCtaText.trim(),
@@ -94,19 +121,74 @@ export default function HomepageAdminPage() {
       };
 
       if (settings?.id) {
-        const { error } = await supabase
+        let res = await supabase
           .from('homepage_settings')
           .update(payload)
           .eq('id', settings.id);
-        if (error) throw error;
+
+        if (res.error && (res.error.message?.includes('column') || res.error.message?.includes('schema cache'))) {
+          const { hero_mobile_image_id, ...basePayload } = payload;
+          res = await supabase
+            .from('homepage_settings')
+            .update(basePayload)
+            .eq('id', settings.id);
+        }
+        if (res.error) throw res.error;
       } else {
-        const { data, error } = await supabase
+        let res = await supabase
           .from('homepage_settings')
           .insert([payload])
           .select('*')
           .single();
-        if (error) throw error;
-        setSettings(data);
+
+        if (res.error && (res.error.message?.includes('column') || res.error.message?.includes('schema cache'))) {
+          const { hero_mobile_image_id, ...basePayload } = payload;
+          res = await supabase
+            .from('homepage_settings')
+            .insert([basePayload])
+            .select('*')
+            .single();
+        }
+        if (res.error) throw res.error;
+        if (res.data) setSettings(res.data);
+      }
+
+      // Persist mobile banner in site_statistics for guaranteed cross-device retrieval
+      try {
+        const { data: existingStat } = await supabase
+          .from('site_statistics')
+          .select('id')
+          .eq('section', 'home_hero_media')
+          .eq('label', 'hero_mobile_image')
+          .maybeSingle();
+
+        if (heroMobileImage?.secure_url) {
+          if (existingStat) {
+            await supabase
+              .from('site_statistics')
+              .update({
+                value: heroMobileImage.id || 'hero_mobile',
+                suffix: heroMobileImage.secure_url,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', existingStat.id);
+          } else {
+            await supabase.from('site_statistics').insert([
+              {
+                section: 'home_hero_media',
+                label: 'hero_mobile_image',
+                value: heroMobileImage.id || 'hero_mobile',
+                suffix: heroMobileImage.secure_url,
+                display_order: 1,
+                is_published: true,
+              },
+            ]);
+          }
+        } else if (existingStat) {
+          await supabase.from('site_statistics').delete().eq('id', existingStat.id);
+        }
+      } catch (statErr) {
+        console.warn('Failed to save mobile banner stat fallback:', statErr);
       }
 
       setSaveSuccess(true);
@@ -214,16 +296,67 @@ export default function HomepageAdminPage() {
             />
           </div>
 
-          {/* Hero Image */}
-          <div>
-            <ImageUploadZone
-              label="Hero Background / Showcase Image"
-              helperText="High-resolution hero imagery displayed above the fold. Drag & drop or click to upload."
-              value={heroImage}
-              onChange={(media) => setHeroImage(media)}
-              folder="alveric/homepage"
-              previewHeight="h-48"
-            />
+          {/* Dual Hero Banners: Desktop & Mobile */}
+          <div className="space-y-4 pt-2">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span className="text-xs font-bold text-navy-900 uppercase tracking-wider">
+                Hero Banners (Desktop & Mobile View)
+              </span>
+              <span className="text-[11px] text-slate-500 font-medium">
+                Upload separate banners for optimal responsive presentation
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              {/* Desktop Banner */}
+              <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-navy-100 flex items-center justify-center text-navy-800">
+                    <Monitor className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-navy-900">Desktop & Laptop Banner</h4>
+                    <p className="text-[10px] text-slate-500">Wide landscape (16:9 / 21:9, min 1920×1080)</p>
+                  </div>
+                </div>
+
+                <ImageUploadZone
+                  label="Desktop Hero Image"
+                  helperText="Primary background banner displayed on desktop, laptops, and large screens."
+                  value={heroImage}
+                  onChange={(media) => setHeroImage(media)}
+                  folder="alveric/homepage"
+                  previewHeight="h-44"
+                />
+              </div>
+
+              {/* Mobile Banner */}
+              <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-gold-100 flex items-center justify-center text-gold-800">
+                      <Smartphone className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-navy-900">Mobile View Banner</h4>
+                      <p className="text-[10px] text-slate-500">Portrait or vertical crop (4:5 / 9:16)</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-700 border border-gold-500/30">
+                    Mobile Only (&lt;768px)
+                  </span>
+                </div>
+
+                <ImageUploadZone
+                  label="Mobile Hero Image"
+                  helperText="Optional vertical banner for phones. If empty, the desktop image will scale automatically."
+                  value={heroMobileImage}
+                  onChange={(media) => setHeroMobileImage(media)}
+                  folder="alveric/homepage/mobile"
+                  previewHeight="h-44"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Buttons */}

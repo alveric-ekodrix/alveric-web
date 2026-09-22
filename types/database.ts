@@ -52,6 +52,7 @@ export interface HomepageSettings {
   hero_heading: string | null;
   hero_description: string | null;
   hero_image_id: string | null;
+  hero_mobile_image_id?: string | null;
   primary_cta_text: string | null;
   primary_cta_url: string | null;
   secondary_cta_text: string | null;
@@ -72,6 +73,7 @@ export interface HomepageSettings {
   created_at: string;
   updated_at: string;
   hero_image?: Media | null;
+  hero_mobile_image?: Media | null;
   cta_background_image?: Media | null;
   about_image_1?: Media | null;
   about_image_2?: Media | null;
@@ -96,6 +98,7 @@ export interface AboutSettings {
   vision: string | null;
   values: string | null;
   banner_image_id?: string | null;
+  banner_mobile_image_id?: string | null;
 
   // Hero fields
   hero_eyebrow?: string | null;
@@ -150,6 +153,7 @@ export interface AboutSettings {
   created_at: string;
   updated_at: string;
   banner_image?: Media | null;
+  banner_mobile_image?: Media | null;
   story_image?: Media | null;
   team_image?: Media | null;
   cta_image?: Media | null;

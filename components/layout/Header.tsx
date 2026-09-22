@@ -52,7 +52,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 w-full bg-white border-b transition-[box-shadow,border-color] duration-200',
+        'fixed top-0 left-0 right-0 z-40 w-full bg-white border-b transition-[box-shadow,border-color] duration-200',
         isScrolled
           ? 'shadow-md border-slate-200'
           : 'border-slate-100'
@@ -64,7 +64,7 @@ export function Header({ companySettings, services = [] }: HeaderProps) {
           <AlvericLogo
             logoUrl={companySettings?.logo_media?.secure_url}
             variant="dark"
-            size="lg"
+            size="xl"
             showTagline={false}
           />
         </div>

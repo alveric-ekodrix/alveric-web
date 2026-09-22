@@ -61,6 +61,32 @@ export const getHomepageSettings = cache(async function getHomepageSettings(): P
         if (heroMedia) result.hero_image = heroMedia;
       }
 
+      // Resolve hero_mobile_image if specified or check fallback
+      if (!result.hero_mobile_image && result.hero_mobile_image_id) {
+        const { data: heroMobileMedia } = await supabase
+          .from('media')
+          .select('*')
+          .eq('id', result.hero_mobile_image_id)
+          .maybeSingle();
+        if (heroMobileMedia) result.hero_mobile_image = heroMobileMedia;
+      }
+
+      if (!result.hero_mobile_image) {
+        const { data: heroMobileStats } = await supabase
+          .from('site_statistics')
+          .select('*')
+          .eq('section', 'home_hero_media')
+          .eq('label', 'hero_mobile_image')
+          .maybeSingle();
+        if (heroMobileStats?.suffix) {
+          result.hero_mobile_image = {
+            id: heroMobileStats.value || heroMobileStats.id,
+            secure_url: heroMobileStats.suffix,
+            alt_text: 'Hero Mobile Banner',
+          } as any;
+        }
+      }
+
       // Resolve cta_background_image if not joined via foreign key
       if (!result.cta_background_image && result.cta_background_image_id) {
         const { data: ctaMedia } = await supabase
@@ -305,6 +331,15 @@ export const getAboutSettings = cache(async function getAboutSettings(): Promise
       if (mediaItem) result.banner_image = mediaItem;
     }
 
+    if (!result.banner_mobile_image && result.banner_mobile_image_id) {
+      const { data: mediaItem } = await supabase
+        .from('media')
+        .select('*')
+        .eq('id', result.banner_mobile_image_id)
+        .maybeSingle();
+      if (mediaItem) result.banner_mobile_image = mediaItem;
+    }
+
     if (!result.story_image && result.story_image_id) {
       const { data: mediaItem } = await supabase
         .from('media')
@@ -332,7 +367,7 @@ export const getAboutSettings = cache(async function getAboutSettings(): Promise
       if (mediaItem) result.team_image = mediaItem;
     }
 
-    // Load media from site_statistics fallback (banner_image, story_image, team_image, cta_image)
+    // Load media from site_statistics fallback (banner_image, banner_mobile_image, story_image, team_image, cta_image)
     const { data: pageMedia } = await supabase
       .from('site_statistics')
       .select('*')
@@ -349,6 +384,8 @@ export const getAboutSettings = cache(async function getAboutSettings(): Promise
 
         if ((item.label === 'about_hero_banner' || item.label === 'banner_image') && !result.banner_image) {
           result.banner_image = mediaObj;
+        } else if ((item.label === 'banner_mobile_image' || item.label === 'about_hero_mobile_banner') && !result.banner_mobile_image) {
+          result.banner_mobile_image = mediaObj;
         } else if (item.label === 'story_image') {
           result.story_image = mediaObj;
         } else if (item.label === 'team_image') {

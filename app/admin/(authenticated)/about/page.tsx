@@ -22,6 +22,8 @@ import {
   BarChart3,
   FileCheck,
   Eye,
+  Smartphone,
+  Monitor,
 } from 'lucide-react';
 
 const EXACT_DESIGN_ABOUT = {
@@ -184,6 +186,7 @@ export default function AdminAboutPage() {
 
   // Media states
   const [bannerImage, setBannerImage] = useState<Media | null>(null);
+  const [bannerMobileImage, setBannerMobileImage] = useState<Media | null>(null);
   const [storyImage, setStoryImage] = useState<Media | null>(null);
   const [teamImage, setTeamImage] = useState<Media | null>(null);
   const [ctaImage, setCtaImage] = useState<Media | null>(null);
@@ -271,6 +274,15 @@ export default function AdminAboutPage() {
             .maybeSingle();
           if (mediaRec) setBannerImage(mediaRec);
         }
+
+        if ((data as any).banner_mobile_image_id) {
+          const { data: mRec } = await supabase
+            .from('media')
+            .select('*')
+            .eq('id', (data as any).banner_mobile_image_id)
+            .maybeSingle();
+          if (mRec) setBannerMobileImage(mRec);
+        }
       }
 
       // 2. Load 4 Company Statistics from site_statistics (section = 'about')
@@ -307,6 +319,8 @@ export default function AdminAboutPage() {
 
             if ((m.label === 'about_hero_banner' || m.label === 'banner_image') && !bannerImage) {
               setBannerImage(mediaItem);
+            } else if ((m.label === 'banner_mobile_image' || m.label === 'about_hero_mobile_banner') && !bannerMobileImage) {
+              setBannerMobileImage(mediaItem);
             } else if (m.label === 'story_image') {
               setStoryImage(mediaItem);
             } else if (m.label === 'team_image') {
@@ -473,6 +487,9 @@ export default function AdminAboutPage() {
       cta_description: ctaDescription.trim() || null,
       cta_primary_button: ctaPrimaryButton.trim() || null,
       cta_secondary_button: ctaSecondaryButton.trim() || null,
+
+      banner_image_id: bannerImage?.id || null,
+      banner_mobile_image_id: bannerMobileImage?.id || null,
     }, stats);
   }
 
@@ -488,6 +505,7 @@ export default function AdminAboutPage() {
       mission: fullPayload.mission,
       vision: fullPayload.vision,
       values: fullPayload.values,
+      banner_image_id: fullPayload.banner_image_id,
       updated_at: new Date().toISOString(),
     };
 
@@ -607,6 +625,7 @@ export default function AdminAboutPage() {
       // 3. Persist media in site_statistics under about_page_media
       const mediaList = [
         { label: 'banner_image', value: bannerImage?.id || 'banner', suffix: bannerImage?.secure_url || '' },
+        { label: 'banner_mobile_image', value: bannerMobileImage?.id || 'banner_mobile', suffix: bannerMobileImage?.secure_url || '' },
         { label: 'story_image', value: storyImage?.id || 'story', suffix: storyImage?.secure_url || '' },
         { label: 'team_image', value: teamImage?.id || 'team', suffix: teamImage?.secure_url || '' },
         { label: 'cta_image', value: ctaImage?.id || 'cta', suffix: ctaImage?.secure_url || '' },
@@ -797,17 +816,69 @@ export default function AdminAboutPage() {
             </span>
           </div>
 
-          {/* Hero Wide Banner Image Upload */}
-          <div>
-            <ImageUploadZone
-              label="Hero Wide Banner Image"
-              helperText="Upload a high-resolution panoramic image (recommended 1920x800 or wider) showing an engineer/construction site. Drives the wide hero banner background."
-              value={bannerImage}
-              onChange={setBannerImage}
-              folder="about"
-              previewHeight="h-44 sm:h-52"
-              compress={false}
-            />
+          {/* Dual Hero Banners: Desktop & Mobile View */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <span className="text-xs font-bold text-navy-900 uppercase tracking-wider">
+                Hero Banners (Desktop &amp; Mobile View)
+              </span>
+              <span className="text-[11px] text-slate-500 font-medium">
+                Upload separate banners for optimal responsive presentation
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              {/* Desktop Panoramic Banner */}
+              <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-navy-100 flex items-center justify-center text-navy-800">
+                    <Monitor className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-navy-900">Desktop &amp; Laptop Wide Banner</h4>
+                    <p className="text-[10px] text-slate-500">Panoramic wide (1920×800 or wider ratio)</p>
+                  </div>
+                </div>
+
+                <ImageUploadZone
+                  label="Desktop Hero Banner Image"
+                  helperText="High-resolution panoramic banner displayed on desktop, laptop, and tablet screens."
+                  value={bannerImage}
+                  onChange={setBannerImage}
+                  folder="about"
+                  previewHeight="h-44"
+                  compress={false}
+                />
+              </div>
+
+              {/* Mobile View Hero Banner */}
+              <div className="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-lg bg-gold-100 flex items-center justify-center text-gold-800">
+                      <Smartphone className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-navy-900">Mobile View Banner</h4>
+                      <p className="text-[10px] text-slate-500">Portrait or compact crop (4:5 / 9:16)</p>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gold-500/15 text-gold-700 border border-gold-500/30">
+                    Mobile Only (&lt;768px)
+                  </span>
+                </div>
+
+                <ImageUploadZone
+                  label="Mobile Hero Banner Image"
+                  helperText="Optional vertical banner for phones. If empty, the desktop image will scale automatically."
+                  value={bannerMobileImage}
+                  onChange={setBannerMobileImage}
+                  folder="about/mobile"
+                  previewHeight="h-44"
+                  compress={false}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">

@@ -6,6 +6,7 @@ interface AboutHeroSectionProps {
   heading: string;
   description: string;
   bannerImageUrl?: string | null;
+  bannerMobileImageUrl?: string | null;
   calculatedYears: number;
   eyebrow?: string | null;
   feature1Title?: string | null;
@@ -21,6 +22,7 @@ export function AboutHeroSection({
   heading,
   description,
   bannerImageUrl,
+  bannerMobileImageUrl,
   calculatedYears,
   eyebrow,
   feature1Title,
@@ -37,8 +39,33 @@ export function AboutHeroSection({
 
   return (
     <section className="relative w-full min-h-[500px] lg:min-h-[560px] xl:min-h-[620px] lg:max-h-[720px] flex items-center overflow-hidden bg-navy-950 text-white border-b border-navy-800">
-      {/* 1. Full-Width Wide Background Image */}
-      {imageUrl && (
+      {/* 1. Full-Width Background Image (Responsive: Desktop + Mobile View Banner) */}
+      {bannerMobileImageUrl ? (
+        <>
+          <div className="md:hidden absolute inset-0 z-0">
+            <Image
+              src={bannerMobileImageUrl}
+              alt={heading || 'Alveric Technical Contracting'}
+              fill
+              priority
+              unoptimized
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
+          <div className="hidden md:block absolute inset-0 z-0">
+            <Image
+              src={imageUrl}
+              alt={heading || 'Alveric Technical Contracting'}
+              fill
+              priority
+              unoptimized
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </div>
+        </>
+      ) : imageUrl ? (
         <div className="absolute inset-0 z-0">
           <Image
             src={imageUrl}
@@ -50,7 +77,7 @@ export function AboutHeroSection({
             className="object-cover object-center"
           />
         </div>
-      )}
+      ) : null}
 
       {/* 2. Deep Multi-Layer Gradients for High Readability on All Viewports */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy-950/95 via-navy-950/85 to-navy-950/40 lg:to-transparent z-0 pointer-events-none" />
