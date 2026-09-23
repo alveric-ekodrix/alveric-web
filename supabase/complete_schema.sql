@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS homepage_settings (
   hero_heading TEXT,
   hero_description TEXT,
   hero_image_id UUID REFERENCES media(id) ON DELETE SET NULL,
+  hero_mobile_image_id UUID REFERENCES media(id) ON DELETE SET NULL,  -- Added: migration 006
   primary_cta_text TEXT,
   primary_cta_url TEXT,
   secondary_cta_text TEXT,
@@ -158,6 +159,10 @@ CREATE TABLE IF NOT EXISTS about_settings (
   cta_description TEXT DEFAULT 'Partner with Alveric Technical Contracting and experience reliable, efficient, and high-quality contracting solutions.',
   cta_primary_button TEXT DEFAULT 'Get a Free Quote',
   cta_secondary_button TEXT DEFAULT 'Chat on WhatsApp',
+
+  -- Banner image columns (Added: migration 006)
+  banner_image_id        UUID REFERENCES media(id) ON DELETE SET NULL,
+  banner_mobile_image_id UUID REFERENCES media(id) ON DELETE SET NULL,
 
   created_at TIMESTAMPTZ DEFAULT now(),
   updated_at TIMESTAMPTZ DEFAULT now()
